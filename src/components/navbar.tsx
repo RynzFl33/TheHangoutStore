@@ -21,14 +21,12 @@ export default function Navbar() {
       setUser(user);
 
       if (user) {
-        // Get user role from database
-        const { data: userProfile } = await supabase
+        const { data: userData } = await supabase
           .from("users")
           .select("role")
           .eq("id", user.id)
           .single();
-
-        setUserRole(userProfile?.role || "user");
+        setUserRole(userData?.role || "user");
       } else {
         setUserRole(null);
       }
@@ -42,14 +40,12 @@ export default function Navbar() {
       setUser(session?.user ?? null);
 
       if (session?.user) {
-        // Get user role from database
-        const { data: userProfile } = await supabase
+        const { data: userData } = await supabase
           .from("users")
           .select("role")
           .eq("id", session.user.id)
           .single();
-
-        setUserRole(userProfile?.role || "user");
+        setUserRole(userData?.role || "user");
       } else {
         setUserRole(null);
       }
@@ -97,10 +93,10 @@ export default function Navbar() {
               </Link>
               {userRole === "admin" && (
                 <Link
-                  href="/dashboard"
+                  href="/dashboard/admin"
                   className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
                 >
-                  <Button>Dashboard</Button>
+                  <Button>Admin Dashboard</Button>
                 </Link>
               )}
               <UserProfile />

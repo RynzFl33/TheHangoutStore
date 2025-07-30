@@ -15,6 +15,19 @@ export default async function AdminOrdersPage() {
     return redirect("/sign-in");
   }
 
+  // Check if user is admin
+  const { data: userData } = await supabase
+    .from("users")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  const userRole = userData?.role || "user";
+
+  if (userRole !== "admin") {
+    return redirect("/dashboard");
+  }
+
   // Fetch orders for the admin dashboard
   const { data: orders, error } = await supabase
     .from("orders")

@@ -10,7 +10,7 @@ import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { removeFromCartAction } from "@/app/actions";
+import { removeFromCartAction, placeOrderAction } from "@/app/actions";
 import { Trash2, Plus, Minus, ShoppingBag, MessageCircle } from "lucide-react";
 import OrderConfirmationModal from "@/components/order-confirmation-modal";
 

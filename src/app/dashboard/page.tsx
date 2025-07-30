@@ -14,14 +14,19 @@ export default async function Dashboard() {
     return redirect("/sign-in");
   }
 
-  // Get user profile to check role
-  const { data: userProfile } = await supabase
+  // Get user role from database
+  const { data: userData } = await supabase
     .from("users")
     .select("role")
     .eq("id", user.id)
     .single();
 
-  const isAdmin = userProfile?.role === "admin";
+  const userRole = userData?.role || "user";
+
+  // Redirect admin users to admin dashboard
+  if (userRole === "admin") {
+    return redirect("/dashboard/admin");
+  }
 
   return (
     <>
@@ -46,21 +51,8 @@ export default async function Dashboard() {
               <div>
                 <h2 className="font-semibold text-xl">User Profile</h2>
                 <p className="text-sm text-muted-foreground">{user.email}</p>
-                <p className="text-xs text-muted-foreground capitalize">
-                  Role: {userProfile?.role || "user"}
-                </p>
               </div>
             </div>
-            {isAdmin && (
-              <div className="mb-4">
-                <a
-                  href="/dashboard/admin"
-                  className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-                >
-                  Access Admin Dashboard
-                </a>
-              </div>
-            )}
             <div className="bg-muted/50 rounded-lg p-4 overflow-hidden">
               <pre className="text-xs font-mono max-h-48 overflow-auto">
                 {JSON.stringify(user, null, 2)}

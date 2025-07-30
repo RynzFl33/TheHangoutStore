@@ -19,6 +19,19 @@ export default async function AdminDashboard() {
     return redirect("/sign-in");
   }
 
+  // Check if user is admin
+  const { data: userData } = await supabase
+    .from("users")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  const userRole = userData?.role || "user";
+
+  if (userRole !== "admin") {
+    return redirect("/dashboard");
+  }
+
   // Fetch products for the admin dashboard
   const { data: products, error } = await supabase
     .from("products")

@@ -11,10 +11,29 @@ import {
 import { Button } from "./ui/button";
 import { UserCircle, Home, Settings, Package } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function DashboardNavbar() {
   const supabase = createClient();
   const router = useRouter();
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  useEffect(() => {
+    const getUserRole = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        const { data: userData } = await supabase
+          .from("users")
+          .select("role")
+          .eq("id", user.id)
+          .single();
+        setUserRole(userData?.role || "user");
+      }
+    };
+    getUserRole();
+  }, [supabase]);
 
   return (
     <nav className="w-full border-b border-gray-200 bg-white py-4">
@@ -25,18 +44,22 @@ export default function DashboardNavbar() {
           </Link>
         </div>
         <div className="flex gap-4 items-center">
-          <Link href="/dashboard/admin">
-            <Button variant="ghost" size="sm">
-              <Settings className="h-4 w-4 mr-2" />
-              Admin
-            </Button>
-          </Link>
-          <Link href="/dashboard/admin/orders">
-            <Button variant="ghost" size="sm">
-              <Package className="h-4 w-4 mr-2" />
-              Orders
-            </Button>
-          </Link>
+          {userRole === "admin" && (
+            <>
+              <Link href="/dashboard/admin">
+                <Button variant="ghost" size="sm">
+                  <Settings className="h-4 w-4 mr-2" />
+                  Admin
+                </Button>
+              </Link>
+              <Link href="/dashboard/admin/orders">
+                <Button variant="ghost" size="sm">
+                  <Package className="h-4 w-4 mr-2" />
+                  Orders
+                </Button>
+              </Link>
+            </>
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
