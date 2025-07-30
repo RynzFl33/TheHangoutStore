@@ -80,6 +80,12 @@ export default function Navbar() {
           {user ? (
             <>
               <Link
+                href="/profile"
+                className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+              >
+                Profile
+              </Link>
+              <Link
                 href="/orders"
                 className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
               >
