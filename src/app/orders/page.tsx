@@ -44,7 +44,7 @@ export default function OrdersPage() {
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<import('@supabase/supabase-js').User | null>(null);
   const router = useRouter();
   const supabase = createClient();
 

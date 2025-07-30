@@ -279,18 +279,26 @@ export default async function SubcategoryPage({
 
 export async function generateStaticParams() {
   const supabase = createBuildClient();
-  const { data: subcategories } = await supabase.from("subcategories").select(
-    `
+  type SubcategoryRow = {
+    slug: string;
+    categories: { slug: string } | { slug: string }[] | null;
+  };
+  const { data: subcategories } = await supabase
+    .from("subcategories")
+    .select(
+      `
       slug,
       categories (
         slug
       )
     `,
-  );
+    ) as { data: SubcategoryRow[] | null };
 
   return (
     subcategories?.map((subcategory) => ({
-      slug: subcategory.categories.slug,
+      slug: Array.isArray(subcategory.categories)
+        ? subcategory.categories[0]?.slug
+        : subcategory.categories?.slug,
       subcategory: subcategory.slug,
     })) || []
   );

@@ -351,7 +351,7 @@ function CartSummary({
 export default function CartPage() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<import('@supabase/supabase-js').User | null>(null);
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [orderCode, setOrderCode] = useState("");
   const [orderTotal, setOrderTotal] = useState(0);
