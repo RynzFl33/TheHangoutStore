@@ -4,12 +4,14 @@ import "./globals.css";
 import Script from "next/script";
 import { TempoInit } from "@/components/tempo-init";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ClientToaster } from "@/components/client-toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Tempo - Modern SaaS Starter",
-  description: "A modern full-stack starter template powered by Next.js",
+  title: "TheHangout - Modern Clothing Store",
+  description:
+    "Discover the latest streetwear and fashion trends at TheHangout",
 };
 
 export default function RootLayout({
@@ -28,6 +30,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <ClientToaster />
         </ThemeProvider>
         <TempoInit />
       </body>

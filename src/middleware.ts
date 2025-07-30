@@ -40,10 +40,25 @@ export async function middleware(req: NextRequest) {
     console.error("Auth session error:", error);
   }
 
-  // Protect admin routes
-  if (req.nextUrl.pathname.startsWith("/dashboard/admin")) {
+  // Protect dashboard routes - require authentication
+  if (req.nextUrl.pathname.startsWith("/dashboard")) {
     if (!session) {
       return NextResponse.redirect(new URL("/sign-in", req.url));
+    }
+
+    // For admin routes, check if user has admin role
+    if (req.nextUrl.pathname.startsWith("/dashboard/admin")) {
+      // Get user profile from database to check role
+      const { data: userProfile } = await supabase
+        .from("users")
+        .select("role")
+        .eq("id", session.user.id)
+        .single();
+
+      // If user doesn't have admin role, redirect to regular dashboard
+      if (!userProfile || userProfile.role !== "admin") {
+        return NextResponse.redirect(new URL("/dashboard", req.url));
+      }
     }
   }
 

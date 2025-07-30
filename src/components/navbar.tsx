@@ -10,6 +10,7 @@ import { User as SupabaseUser } from "@supabase/supabase-js";
 
 export default function Navbar() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -18,14 +19,40 @@ export default function Navbar() {
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user);
+
+      if (user) {
+        // Get user role from database
+        const { data: userProfile } = await supabase
+          .from("users")
+          .select("role")
+          .eq("id", user.id)
+          .single();
+
+        setUserRole(userProfile?.role || "user");
+      } else {
+        setUserRole(null);
+      }
     };
 
     getUser();
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user ?? null);
+
+      if (session?.user) {
+        // Get user role from database
+        const { data: userProfile } = await supabase
+          .from("users")
+          .select("role")
+          .eq("id", session.user.id)
+          .single();
+
+        setUserRole(userProfile?.role || "user");
+      } else {
+        setUserRole(null);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -68,12 +95,14 @@ export default function Navbar() {
               >
                 Favorites
               </Link>
-              <Link
-                href="/dashboard"
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-              >
-                <Button>Dashboard</Button>
-              </Link>
+              {userRole === "admin" && (
+                <Link
+                  href="/dashboard"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+                >
+                  <Button>Dashboard</Button>
+                </Link>
+              )}
               <UserProfile />
             </>
           ) : (
