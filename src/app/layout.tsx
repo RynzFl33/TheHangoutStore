@@ -2,16 +2,15 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
-import { TempoInit } from "@/components/tempo-init";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClientToaster } from "@/components/client-toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "TheHangout - Modern Clothing Store",
+  title: "TheHangout - Accessories, Streetwear, and Fashion",
   description:
-    "Discover the latest streetwear and fashion trends at TheHangout",
+    "Discover the latest in accessories, streetwear, and fashion at TheHangout. Shop now for unique styles and trends.",
 };
 
 export default function RootLayout({
@@ -21,7 +20,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <Script src="https://api.tempolabs.ai/proxy-asset?url=https://storage.googleapis.com/tempo-public-assets/error-handling.js" />
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
@@ -32,7 +30,6 @@ export default function RootLayout({
           {children}
           <ClientToaster />
         </ThemeProvider>
-        <TempoInit />
       </body>
     </html>
   );
