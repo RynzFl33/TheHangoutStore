@@ -10,9 +10,10 @@ import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { removeFromCartAction, placeOrderAction } from "@/app/actions";
+import { removeFromCartAction } from "@/app/actions";
 import { Trash2, Plus, Minus, ShoppingBag, MessageCircle } from "lucide-react";
 import OrderConfirmationModal from "@/components/order-confirmation-modal";
+import type { User } from "@supabase/supabase-js";
 
 interface CartItem {
   id: string;
@@ -124,7 +125,6 @@ function CartSummary({
   items: CartItem[];
   onOrderPlaced: (orderCode: string, total: number) => void;
 }) {
-  const [showCheckoutMessage, setShowCheckoutMessage] = useState(false);
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const supabase = createClient();
 
@@ -136,10 +136,6 @@ function CartSummary({
   const shipping = subtotal > 50 ? 0 : 9.99;
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + shipping + tax;
-
-  const handleCheckout = () => {
-    setShowCheckoutMessage(true);
-  };
 
   const handlePlaceOrder = async () => {
     setIsPlacingOrder(true);
@@ -220,64 +216,12 @@ function CartSummary({
       }
 
       onOrderPlaced(orderCode, total);
-      setShowCheckoutMessage(false);
     } catch (error) {
       console.error("Error placing order:", error);
     } finally {
       setIsPlacingOrder(false);
     }
   };
-
-  if (showCheckoutMessage) {
-    return (
-      <Card className="bg-white dark:bg-slate-900">
-        <CardHeader>
-          <CardTitle className="text-gray-900 dark:text-white text-center">
-            Complete Your Order
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="text-center space-y-6">
-          <MessageCircle className="w-16 h-16 text-purple-600 mx-auto" />
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              Please contact us via Telegram or Facebook to complete your order.
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300">
-              Our team will help you finalize your purchase and arrange
-              delivery.
-            </p>
-          </div>
-
-          <div className="bg-gray-50 dark:bg-slate-800 p-4 rounded-lg">
-            <div className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-              Order Total:{" "}
-              <span className="font-bold text-gray-900 dark:text-white">
-                ${total.toFixed(2)}
-              </span>
-            </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">
-              Reference this total when contacting us
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <Button
-              onClick={() => setShowCheckoutMessage(false)}
-              variant="outline"
-              className="w-full"
-            >
-              Back to Cart
-            </Button>
-            <Link href="/contact">
-              <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
-                Contact Us
-              </Button>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
     <Card className="bg-white dark:bg-slate-900">
@@ -324,13 +268,6 @@ function CartSummary({
         )}
 
         <Button
-          onClick={handleCheckout}
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3"
-        >
-          Proceed to Checkout
-        </Button>
-
-        <Button
           onClick={handlePlaceOrder}
           disabled={isPlacingOrder}
           className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 mt-2"
@@ -351,7 +288,7 @@ function CartSummary({
 export default function CartPage() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [orderCode, setOrderCode] = useState("");
   const [orderTotal, setOrderTotal] = useState(0);
@@ -362,7 +299,6 @@ export default function CartPage() {
     setOrderCode(code);
     setOrderTotal(total);
     setShowOrderModal(true);
-    // Refresh cart items to show empty cart
     setCartItems([]);
   };
 
@@ -373,7 +309,9 @@ export default function CartPage() {
   };
 
   useEffect(() => {
+    let isMounted = true;
     const getCartItems = async () => {
+      setLoading(true); // Always set loading at the start
       try {
         const {
           data: { user },
@@ -384,7 +322,7 @@ export default function CartPage() {
           return;
         }
 
-        setUser(user);
+        if (isMounted) setUser(user);
 
         const { data: cartItems, error } = await supabase
           .from("cart_items")
@@ -404,21 +342,28 @@ export default function CartPage() {
           .eq("user_id", user.id)
           .order("created_at", { ascending: false });
 
-        if (error) {
-          console.error("Error fetching cart items:", error);
-          setCartItems([]);
-        } else {
-          setCartItems(cartItems as CartItem[]);
+        if (isMounted) {
+          if (error) {
+            console.error("Error fetching cart items:", error);
+            setCartItems([]);
+          } else {
+            setCartItems(cartItems as CartItem[]);
+          }
         }
       } catch (error) {
-        console.error("Error:", error);
-        setCartItems([]);
+        if (isMounted) {
+          console.error("Error:", error);
+          setCartItems([]);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     getCartItems();
+    return () => {
+      isMounted = false;
+    };
   }, [supabase, router]);
 
   if (loading) {
