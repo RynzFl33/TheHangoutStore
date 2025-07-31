@@ -261,7 +261,7 @@ export default function FAQPage() {
               <HelpCircle className="w-12 h-12 mx-auto mb-4" />
               <h2 className="text-2xl font-bold mb-4">Still need help?</h2>
               <p className="text-purple-100 mb-6 max-w-2xl mx-auto">
-                Can't find the answer you're looking for? Our customer support
+                Can&apos;t find the answer you&apos;re looking for? Our customer support
                 team is here to help you with any questions or concerns.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

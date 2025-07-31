@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 import {
   Table,
   TableBody,
@@ -124,13 +125,15 @@ export default function ProductTable({
           {products.map((product) => (
             <TableRow key={product.id}>
               <TableCell>
-                <img
+                <Image
                   src={
                     product.image_url ||
                     "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&q=80"
                   }
                   alt={product.name}
-                  className="w-12 h-12 object-cover rounded-md"
+                  width={48} // 12 * 4 (Tailwind w-12)
+                  height={48} // 12 * 4 (Tailwind h-12)
+                  className="object-cover rounded-md"
                 />
               </TableCell>
               <TableCell>
@@ -171,11 +174,10 @@ export default function ProductTable({
               </TableCell>
               <TableCell>
                 <span
-                  className={`text-sm ${
-                    (product.stock_quantity || 0) > 0
+                  className={`text-sm ${(product.stock_quantity || 0) > 0
                       ? "text-green-600 dark:text-green-400"
                       : "text-red-600 dark:text-red-400"
-                  }`}
+                    }`}
                 >
                   {product.stock_quantity || 0} units
                 </span>

@@ -57,13 +57,14 @@ export default function ProductCard({
         title: "Added to Cart",
         description: `${product.name} has been added to your cart.`,
       });
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to add item to cart. Please try again.",
         variant: "destructive",
       });
-    } finally {
+    }
+    finally {
       setIsLoading(false);
     }
   };
@@ -77,11 +78,10 @@ export default function ProductCard({
       setIsFavorited(!isFavorited);
       toast({
         title: isFavorited ? "Removed from Favorites" : "Added to Favorites",
-        description: `${product.name} has been ${
-          isFavorited ? "removed from" : "added to"
-        } your favorites.`,
+        description: `${product.name} has been ${isFavorited ? "removed from" : "added to"
+          } your favorites.`,
       });
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to update favorites. Please try again.",
@@ -149,9 +149,8 @@ export default function ProductCard({
               className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-gray-900 rounded-full shadow text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               <Heart
-                className={`w-5 h-5 transition-colors ${
-                  isFavorited ? "fill-red-500 text-red-500" : ""
-                }`}
+                className={`w-5 h-5 transition-colors ${isFavorited ? "fill-red-500 text-red-500" : ""
+                  }`}
               />
             </motion.button>
           )}

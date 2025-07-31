@@ -6,12 +6,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "../../../supabase/client";
 import Navbar from "@/components/navbar";
+import Image from "next/image";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { removeFromCartAction } from "@/app/actions";
-import { Trash2, Plus, Minus, ShoppingBag, MessageCircle } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
 import OrderConfirmationModal from "@/components/order-confirmation-modal";
 import type { User } from "@supabase/supabase-js";
 
@@ -41,9 +42,11 @@ function CartItemCard({ item }: { item: CartItem }) {
         <div className="flex flex-col md:flex-row gap-4">
           {/* Product Image */}
           <div className="w-full md:w-32 h-32 flex-shrink-0">
-            <img
+            <Image
               src={product.image_url}
               alt={product.name}
+              width={128}
+              height={128}
               className="w-full h-full object-cover rounded-lg"
             />
           </div>
@@ -126,7 +129,6 @@ function CartSummary({
   onOrderPlaced: (orderCode: string, total: number) => void;
 }) {
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
-  const supabase = createClient();
 
   const subtotal = items.reduce((sum, item) => {
     const price = item.products.sale_price || item.products.price;
@@ -192,7 +194,7 @@ function CartSummary({
       }));
 
       // Create the order
-      const { data: order, error } = await supabase
+      const { data: error } = await supabase
         .from("orders")
         .insert({
           user_id: user?.id || null,
@@ -287,8 +289,9 @@ function CartSummary({
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+  const [, setLoading] = useState(false);
+  const [, setUser] = useState<User | null>(null);
+
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [orderCode, setOrderCode] = useState("");
   const [orderTotal, setOrderTotal] = useState(0);
@@ -310,36 +313,32 @@ export default function CartPage() {
 
   useEffect(() => {
     let isMounted = true;
-    const getCartItems = async () => {
-      setLoading(true); // Always set loading at the start
-      try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
 
-        if (!user) {
+    const getCartItems = async () => {
+      setLoading(true);
+      try {
+        const { data: { user: supaUser } } = await supabase.auth.getUser();
+        if (!supaUser) {
           router.push("/sign-in");
           return;
         }
 
-        if (isMounted) setUser(user);
+        if (isMounted) setUser(supaUser); // only for storing, not needed below
 
         const { data: cartItems, error } = await supabase
           .from("cart_items")
-          .select(
-            `
-            *,
-            products (
-              id,
-              name,
-              price,
-              sale_price,
-              image_url,
-              stock_quantity
-            )
-          `,
+          .select(`
+          *,
+          products (
+            id,
+            name,
+            price,
+            sale_price,
+            image_url,
+            stock_quantity
           )
-          .eq("user_id", user.id)
+        `)
+          .eq("user_id", supaUser.id)
           .order("created_at", { ascending: false });
 
         if (isMounted) {
@@ -361,27 +360,12 @@ export default function CartPage() {
     };
 
     getCartItems();
+
     return () => {
       isMounted = false;
     };
   }, [supabase, router]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
-        <Navbar />
-        <div className="container mx-auto px-4 py-12">
-          <div className="text-center py-16">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-300">
-              Loading your cart...
-            </p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
@@ -405,7 +389,7 @@ export default function CartPage() {
               Your cart is empty
             </h2>
             <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Looks like you haven't added any items to your cart yet.
+              Looks like you haven&rsquo;t added any items to your cart yet.
             </p>
             <Link href="/shop">
               <Button className="bg-purple-600 hover:bg-purple-700 text-white">

@@ -7,7 +7,7 @@ import type { User } from "@supabase/supabase-js"; // <-- Add this import
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
@@ -26,17 +26,27 @@ import {
   ShoppingBag,
 } from "lucide-react";
 
+interface Product {
+  name: string;
+  size?: string;
+  color?: string;
+  quantity: number;
+  price: number;
+}
+
+
 interface Order {
   id: string;
   user_id?: string;
   user_email?: string;
-  product_ids: any[];
+  product_ids: Product[];
   order_code: string;
   total_amount: number;
   status: string;
   created_at: string;
   updated_at: string;
 }
+
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -45,7 +55,7 @@ export default function OrdersPage() {
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null); // <-- Fix type here
+  const [, setUser] = useState<User | null>(null); // <-- Fix type here
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [orderToDelete, setOrderToDelete] = useState<Order | null>(null);
   const router = useRouter();
@@ -119,7 +129,7 @@ export default function OrdersPage() {
       setIsViewDialogOpen(false);
       setShowDeleteDialog(false);
       setOrderToDelete(null);
-    } catch (err) {
+    } catch {
       alert("An error occurred while deleting the order.");
     }
   };
@@ -183,9 +193,10 @@ export default function OrdersPage() {
     }).format(price);
   };
 
-  const getTotalProducts = (productIds: any[]) => {
+  const getTotalProducts = (productIds: Product[]) => {
     return productIds.reduce((sum, item) => sum + (item.quantity || 1), 0);
   };
+
 
   if (loading) {
     return (
@@ -336,7 +347,7 @@ export default function OrdersPage() {
                   Products Ordered
                 </label>
                 <div className="space-y-3">
-                  {selectedOrder.product_ids.map((item, index) => (
+                  {selectedOrder.product_ids.map((item: Product, index) => (
                     <div
                       key={index}
                       className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"

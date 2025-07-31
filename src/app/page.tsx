@@ -3,21 +3,18 @@ import Hero from "@/components/hero";
 import Navbar from "@/components/navbar";
 import {
   ArrowUpRight,
-  CheckCircle2,
   Shield,
   Truck,
   Star,
   Heart,
-  Zap,
 } from "lucide-react";
 import { createClient } from "../../supabase/server";
 import Link from "next/link";
+import Image from "next/image";
 
 export default async function Home() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  await supabase.auth.getUser();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
@@ -66,10 +63,12 @@ export default async function Home() {
             ].map((category, index) => (
               <div key={index} className="group cursor-pointer">
                 <div className="relative overflow-hidden rounded-2xl mb-4 aspect-square">
-                  <img
+                  <Image
                     src={category.image}
                     alt={category.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                   />
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
                 </div>
