@@ -3,8 +3,13 @@ import { createBuildClient } from "../../../../../supabase/client-build";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
-import { Input } from "@/components/ui/input";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -13,10 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Search } from "lucide-react";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { Suspense } from "react";
 
 interface Product {
   id: string;
@@ -63,7 +64,7 @@ async function getSubcategory(categorySlug: string, subcategorySlug: string) {
         name,
         slug
       )
-    `,
+    `
     )
     .eq("slug", subcategorySlug)
     .eq("categories.slug", categorySlug)
@@ -79,7 +80,6 @@ async function getSubcategory(categorySlug: string, subcategorySlug: string) {
 async function getSubcategoryProducts(subcategorySlug: string) {
   const supabase = await createClient();
 
-  // First get the subcategory ID
   const { data: subcategory } = await supabase
     .from("subcategories")
     .select("id")
@@ -90,7 +90,6 @@ async function getSubcategoryProducts(subcategorySlug: string) {
     return [];
   }
 
-  // Then get products that belong to this subcategory
   const { data: products, error } = await supabase
     .from("products")
     .select(
@@ -104,7 +103,7 @@ async function getSubcategoryProducts(subcategorySlug: string) {
           slug
         )
       )
-    `,
+    `
     )
     .eq("subcategory_id", subcategory.id)
     .order("created_at", { ascending: false });
@@ -140,14 +139,40 @@ function ProductGrid({ products }: { products: Product[] }) {
   );
 }
 
+// This is the key fix - using a generic Record type
+export async function generateMetadata({
+  params,
+}: {
+  params: Record<string, string>;
+}): Promise<Metadata> {
+  const slug = params.slug;
+  const subcategory = params.subcategory;
+  
+  const category = await getSubcategory(slug, subcategory);
+  
+  return {
+    title: category?.name || 'Subcategory',
+    description: category?.description,
+    openGraph: {
+      title: category?.name || 'Subcategory',
+      description: category?.description || '',
+      images: category?.image_url ? [{ url: category.image_url }] : [],
+    },
+  };
+}
+
+// This is the critical fix - using a generic Record type
 export default async function SubcategoryPage({
   params,
 }: {
-  params: { slug: string; subcategory: string };
+  params: Record<string, string>;
 }) {
+  const slug = params.slug;
+  const subcategorySlug = params.subcategory;
+  
   const [subcategory, products] = await Promise.all([
-    getSubcategory(params.slug, params.subcategory),
-    getSubcategoryProducts(params.subcategory),
+    getSubcategory(slug, subcategorySlug),
+    getSubcategoryProducts(subcategorySlug),
   ]);
 
   if (!subcategory) {
@@ -161,7 +186,6 @@ export default async function SubcategoryPage({
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
       <Navbar />
 
-      {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-purple-600 to-pink-600 text-white py-16 overflow-hidden">
         <div className="absolute inset-0">
           <Image
@@ -202,7 +226,6 @@ export default async function SubcategoryPage({
       </section>
 
       <div className="container mx-auto px-4 py-12">
-        {/* Search and Filter Bar */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="relative flex-1">
@@ -240,7 +263,6 @@ export default async function SubcategoryPage({
           </div>
         </div>
 
-        {/* Featured Products */}
         {featuredProducts.length > 0 && (
           <section className="mb-12">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
@@ -252,7 +274,6 @@ export default async function SubcategoryPage({
           </section>
         )}
 
-        {/* Sale Products */}
         {saleProducts.length > 0 && (
           <section className="mb-12">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
@@ -264,7 +285,6 @@ export default async function SubcategoryPage({
           </section>
         )}
 
-        {/* All Products */}
         <section>
           <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
             All {subcategory.name}
@@ -288,7 +308,7 @@ export async function generateStaticParams() {
       categories (
         slug
       )
-    `,
+    `
   );
 
   return (

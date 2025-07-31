@@ -497,42 +497,42 @@ export default function OrderManagement({
         </DialogContent>
       </Dialog>
 
-<Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-  <DialogContent className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-xl rounded-xl">
-    <DialogHeader>
-      <DialogTitle className="text-lg font-bold">Delete Order</DialogTitle>
-    </DialogHeader>
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-xl rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold">Delete Order</DialogTitle>
+          </DialogHeader>
 
-    <div className="space-y-4">
-      <p className="text-sm">
-        Are you sure you want to delete{" "}
-        <span className="font-semibold text-red-600 dark:text-red-400">
-          {orderToDelete?.order_code}
-        </span>
-        ? This action cannot be undone.
-      </p>
+          <div className="space-y-4">
+            <p className="text-sm">
+              Are you sure you want to delete{" "}
+              <span className="font-semibold text-red-600 dark:text-red-400">
+                {orderToDelete?.order_code}
+              </span>
+              ? This action cannot be undone.
+            </p>
 
-      <div className="flex justify-end gap-2">
-        <Button
-          variant="outline"
-          onClick={() => {
-            setIsDeleteDialogOpen(false);
-            setOrderToDelete(null);
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="destructive"
-          onClick={handleDeleteOrder}
-          disabled={isUpdating === orderToDelete?.id}
-        >
-          Confirm Delete
-        </Button>
-      </div>
-    </div>
-  </DialogContent>
-</Dialog>
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsDeleteDialogOpen(false);
+                  setOrderToDelete(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDeleteOrder}
+                disabled={isUpdating === orderToDelete?.id}
+              >
+                Confirm Delete
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
     </Card>
   );
