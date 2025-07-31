@@ -111,7 +111,7 @@ function CategoryFilter({ categories }: { categories: Category[] }) {
       <div className="flex flex-wrap gap-3">
         <Badge
           variant="outline"
-          className="cursor-pointer hover:bg-purple-100 hover:border-purple-300 transition-colors"
+          className="cursor-pointer hover:bg-[#F5DEB3] hover:border-[#36454F] transition-colors"
         >
           All Products
         </Badge>
@@ -119,7 +119,7 @@ function CategoryFilter({ categories }: { categories: Category[] }) {
           <Link key={category.id} href={`/categories/${category.slug}`}>
             <Badge
               variant="outline"
-              className="cursor-pointer hover:bg-purple-100 hover:border-purple-300 transition-colors"
+              className="cursor-pointer hover:bg-[#F5DEB3] hover:border-[#36454F] transition-colors"
             >
               {category.name}
             </Badge>
@@ -157,12 +157,12 @@ export default async function ShopPage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 text-white py-20">
+      <section className="bg-gradient-to-r from-[#F5DEB3] via-[#36454F] to-[#36454F]/600 text-white py-20">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-200">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-white-200">
             Discover Your Style
           </h1>
-          <p className="text-xl text-purple-100 max-w-2xl mx-auto mb-8">
+          <p className="text-xl text-white max-w-2xl mx-auto mb-8">
             Curated collections of the hottest streetwear and fashion trends
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
@@ -187,7 +187,7 @@ export default async function ShopPage() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 placeholder="Search products..."
-                className="pl-10 bg-white dark:bg-slate-800 border-2 focus:border-purple-300"
+                className="pl-10 bg-white dark:bg-slate-800 border-2 focus:border-[#F5DEB3]/300"
               />
             </div>
             <div className="flex gap-2">
@@ -226,9 +226,9 @@ export default async function ShopPage() {
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                🆕 New Arrivals
+                New Arrivals
               </h2>
-              <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white">
+              <Badge className="bg-gradient-to-r from-orange-500 to- text-white">
                 Just Dropped
               </Badge>
             </div>
@@ -243,7 +243,7 @@ export default async function ShopPage() {
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                ⭐ Featured Collection
+                Featured Collection
               </h2>
               <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
                 Editor's Choice
@@ -260,9 +260,9 @@ export default async function ShopPage() {
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                🔥 Hot Deals
+                Hot Deals
               </h2>
-              <Badge className="bg-gradient-to-r from-red-500 to-orange-500 text-white animate-pulse">
+              <Badge className="bg-gradient-to-r from-[#FFD700]/50 to-[#FFD700]/60 text-white animate-pulse">
                 Limited Time
               </Badge>
             </div>
@@ -277,9 +277,9 @@ export default async function ShopPage() {
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                💎 Premium Collection
+                Premium Collection
               </h2>
-              <Badge className="bg-gradient-to-r from-yellow-500 to-amber-500 text-white">
+              <Badge className="bg-gradient-to-r from-[#FFD700]/50 to-[#FFD700]/60 text-white">
                 Luxury
               </Badge>
             </div>
@@ -298,9 +298,9 @@ export default async function ShopPage() {
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                💰 Budget Friendly
+                Budget Friendly
               </h2>
-              <Badge className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white">
+              <Badge className="bg-gradient-to-r from-[#FFD700]/50 to-[#FFD700]/60 text-white">
                 Under $50
               </Badge>
             </div>
@@ -319,9 +319,9 @@ export default async function ShopPage() {
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                📦 In Stock & Ready
+                In Stock & Ready
               </h2>
-              <Badge className="bg-gradient-to-r from-teal-500 to-green-500 text-white">
+              <Badge className="bg-gradient-to-r from-[#50C878]/50 to-[#50C878]/60 text-white">
                 Fast Shipping
               </Badge>
             </div>
@@ -336,7 +336,7 @@ export default async function ShopPage() {
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                🛍️ More to Explore
+                More to Explore
               </h2>
               <Badge variant="outline" className="border-gray-300">
                 {remainingProducts.length} items

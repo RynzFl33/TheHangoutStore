@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { createClient } from "../../supabase/client";
 import { Button } from "./ui/button";
-import { User, UserCircle } from "lucide-react";
-import UserProfile from "./user-profile";
 import { useEffect, useState } from "react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
+import UserProfile from "./user-profile";
+import { motion } from "framer-motion";
 
 export default function Navbar() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
@@ -15,9 +15,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
 
       if (user) {
@@ -34,11 +32,8 @@ export default function Navbar() {
 
     getUser();
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user ?? null);
-
       if (session?.user) {
         const { data: userData } = await supabase
           .from("users")
@@ -55,71 +50,89 @@ export default function Navbar() {
   }, [supabase]);
 
   return (
-    <nav className="w-full border-b border-gray-200 bg-white py-2">
-      <div className="container mx-auto px-4 flex justify-between items-center">
+    <motion.nav
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="w-full z-50 border-b border-[#F5DEB3]/30 bg-[#36454F]/80 backdrop-blur-md sticky top-0 shadow-md"
+    >
+      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Link
           href="/"
-          prefetch
-          className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
+          className="text-3xl font-bold bg-gradient-to-r from-[#F5DEB3] to-white bg-clip-text text-transparent"
         >
           TheHangout
         </Link>
-        <div className="flex gap-4 items-center">
-          <Link
-            href="/shop"
-            className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-          >
-            Shop
-          </Link>
-          <Link
-            href="/categories"
-            className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-          >
-            Categories
-          </Link>
-          {user ? (
-            <>
 
+        <div className="flex gap-4 items-center">
+          {[
+            { href: "/shop", label: "Shop" },
+            { href: "/categories", label: "Categories" },
+          ].map((link) => (
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              key={link.href}
+            >
+              <Link
+                href={link.href}
+                className="px-3 py-2 text-sm font-medium text-white hover:text-[#F5DEB3] transition-colors"
+              >
+                {link.label}
+              </Link>
+            </motion.div>
+          ))}
+
+          {user && (
+            <>
               <Link
                 href="/orders"
-                className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+                className="px-3 py-2 text-sm font-medium text-white hover:text-[#F5DEB3] transition"
               >
                 My Orders
               </Link>
               <Link
                 href="/favorites"
-                className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+                className="px-3 py-2 text-sm font-medium text-white hover:text-[#F5DEB3] transition"
               >
                 Favorites
               </Link>
+
               {userRole === "admin" && (
-                <Link
-                  href="/dashboard/admin"
-                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-                >
-                  <Button>Admin Dashboard</Button>
-                </Link>
+                <motion.div whileHover={{ scale: 1.05 }}>
+                  <Link href="/dashboard/admin">
+                    <Button variant="default" className="bg-[#F5DEB3] text-black hover:bg-white">
+                      Admin Dashboard
+                    </Button>
+                  </Link>
+                </motion.div>
               )}
+
               <UserProfile />
             </>
-          ) : (
+          )}
+
+          {!user && (
             <>
-              <Link
-                href="/sign-in"
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-              >
-                Sign In
-              </Link>
-              <Link
-                href="/sign-up"
-                className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md hover:bg-gray-800"
-              >
-                Sign Up
-              </Link>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Link
+                  href="/sign-in"
+                  className="text-sm font-medium px-4 py-2 text-white hover:text-[#F5DEB3] transition"
+                >
+                  Sign In
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }}>
+                <Link
+                  href="/sign-up"
+                  className="text-sm font-medium px-4 py-2 rounded-md bg-white text-black hover:bg-[#F5DEB3] transition"
+                >
+                  Sign Up
+                </Link>
+              </motion.div>
             </>
           )}
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 }
