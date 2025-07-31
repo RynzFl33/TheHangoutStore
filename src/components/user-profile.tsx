@@ -1,5 +1,5 @@
 'use client'
-import { UserCircle } from 'lucide-react'
+import { UserCircle, Settings, LogOut } from 'lucide-react'
 import { Button } from './ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { createClient } from '../../supabase/client'
@@ -17,10 +17,19 @@ export default function UserProfile() {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={async () => {
-                    await supabase.auth.signOut()
-                    router.refresh()
-                }}>
+                <DropdownMenuItem
+                    onClick={() => router.push('/profile')}
+                >
+                    <Settings className="mr-2 h-4 w-4" />
+                    profile
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                    onClick={async () => {
+                        await supabase.auth.signOut()
+                        router.refresh()
+                    }}
+                >
+                    <LogOut className="mr-2 h-4 w-4" />
                     Sign out
                 </DropdownMenuItem>
             </DropdownMenuContent>
