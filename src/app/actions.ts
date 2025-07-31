@@ -166,6 +166,7 @@ export const addToCartAction = async (formData: FormData) => {
   } = await supabase.auth.getUser();
 
   if (!user) {
+    // Make sure to return here!
     return encodedRedirect(
       "error",
       "/sign-in",

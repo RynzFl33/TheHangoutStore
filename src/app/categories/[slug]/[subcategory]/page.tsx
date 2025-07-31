@@ -290,7 +290,9 @@ export async function generateStaticParams() {
 
   return (
     subcategories?.map((subcategory) => ({
-      slug: subcategory.categories.slug,
+      slug: Array.isArray(subcategory.categories)
+        ? (subcategory.categories[0]?.slug as string)
+        : (subcategory.categories as { slug: string }).slug,
       subcategory: subcategory.slug,
     })) || []
   );
