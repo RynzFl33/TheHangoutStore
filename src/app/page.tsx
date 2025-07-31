@@ -12,6 +12,7 @@ import { createClient } from "../../supabase/server";
 import Link from "next/link";
 import Image from "next/image";
 
+
 export default async function Home() {
   const supabase = await createClient();
   await supabase.auth.getUser();
