@@ -7,9 +7,12 @@ import { ClientToaster } from "@/components/client-toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "TheHangout - Accessories, Streetwear, and Fashion",
+  title: "The Hangout Store",
   description:
-    "Discover the latest in accessories, streetwear, and fashion at TheHangout. Shop now for unique styles and trends.",
+    "Discover the latest trends in streetwear, designed for the next generation.",
+    icons: {
+      icon: "/TheHangOut.png",
+    }
 };
 
 export default function RootLayout({
