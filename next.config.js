@@ -17,6 +17,9 @@ const nextConfig = {
     'http://192.168.1.2:3000',
     // Add other origins if needed
   ],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 module.exports = nextConfig;

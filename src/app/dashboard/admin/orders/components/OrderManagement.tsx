@@ -74,6 +74,9 @@ export default function OrderManagement({
   const [isUpdating, setIsUpdating] = useState<string | null>(null);
   const { toast } = useToast();
   const supabase = createClient();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState<Order | null>(null);
+
 
   const handleViewOrder = (order: Order) => {
     setSelectedOrder(order);
@@ -96,10 +99,10 @@ export default function OrderManagement({
       const updatedOrders = orders.map((order) =>
         order.id === orderId
           ? {
-              ...order,
-              status: newStatus,
-              updated_at: new Date().toISOString(),
-            }
+            ...order,
+            status: newStatus,
+            updated_at: new Date().toISOString(),
+          }
           : order,
       );
       setOrders(updatedOrders);
@@ -121,16 +124,19 @@ export default function OrderManagement({
     }
   };
 
-  const handleDeleteOrder = async (orderId: string) => {
-    const confirmed = window.confirm("Are you sure you want to delete this order?");
-    if (!confirmed) return;
+  const handleDeleteOrder = async () => {
+    if (!orderToDelete) return;
 
-    setIsUpdating(orderId);
+    setIsUpdating(orderToDelete.id);
     try {
-      const { error } = await supabase.from("orders").delete().eq("id", orderId);
+      const { error } = await supabase
+        .from("orders")
+        .delete()
+        .eq("id", orderToDelete.id);
+
       if (error) throw error;
 
-      const updatedOrders = orders.filter((order) => order.id !== orderId);
+      const updatedOrders = orders.filter((order) => order.id !== orderToDelete.id);
       setOrders(updatedOrders);
       applyFilters(updatedOrders, searchTerm, statusFilter);
 
@@ -147,8 +153,11 @@ export default function OrderManagement({
       });
     } finally {
       setIsUpdating(null);
+      setOrderToDelete(null);
+      setIsDeleteDialogOpen(false);
     }
   };
+
 
   const applyFilters = (orderList: Order[], search: string, status: string) => {
     let filtered = orderList;
@@ -378,11 +387,15 @@ export default function OrderManagement({
                       <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => handleDeleteOrder(order.id)}
+                        onClick={() => {
+                          setOrderToDelete(order);
+                          setIsDeleteDialogOpen(true);
+                        }}
                         disabled={isUpdating === order.id}
                       >
                         <XCircle className="w-4 h-4" />
                       </Button>
+
                     </TableCell>
                   </TableRow>
                 ))}
@@ -483,6 +496,44 @@ export default function OrderManagement({
           )}
         </DialogContent>
       </Dialog>
+
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-xl rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-bold">Delete Order</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <p className="text-sm">
+              Are you sure you want to delete{" "}
+              <span className="font-semibold text-red-600 dark:text-red-400">
+                {orderToDelete?.order_code}
+              </span>
+              ? This action cannot be undone.
+            </p>
+
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsDeleteDialogOpen(false);
+                  setOrderToDelete(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDeleteOrder}
+                disabled={isUpdating === orderToDelete?.id}
+              >
+                Confirm Delete
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
     </Card>
   );
 }
