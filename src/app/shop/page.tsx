@@ -167,13 +167,13 @@ export default async function ShopPage() {
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <Badge className="bg-white/20 text-white border-white/30">
-              ✨ New Arrivals Daily
+              New Arrivals Daily
             </Badge>
             <Badge className="bg-white/20 text-white border-white/30">
-              🔥 Exclusive Deals
+              Exclusive Deals
             </Badge>
             <Badge className="bg-white/20 text-white border-white/30">
-              🚚 Free Shipping Over $75
+              Free Shipping Over $75
             </Badge>
           </div>
         </div>
