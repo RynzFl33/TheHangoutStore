@@ -70,7 +70,20 @@ const measurementTips = [
   },
 ];
 
-function SizeChart({ chart }: { chart: typeof sizeCharts.mens }) {
+type SizeChartRow = {
+  size: string;
+  chest: string;
+  length: string;
+  waist?: string;
+  sleeve?: string;
+};
+
+type SizeChartType = {
+  title: string;
+  sizes: SizeChartRow[];
+};
+
+function SizeChart({ chart }: { chart: SizeChartType }) {
   return (
     <Card className="bg-white dark:bg-slate-900">
       <CardHeader>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Heart, ShoppingCart, Star } from "lucide-react";
+import { Heart, ShoppingCart } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Card, CardContent, CardFooter } from "./ui/card";
@@ -77,7 +77,9 @@ export default function ProductCard({
       setIsFavorited(!isFavorited);
       toast({
         title: isFavorited ? "Removed from Favorites" : "Added to Favorites",
-        description: `${product.name} has been ${isFavorited ? "removed from" : "added to"} your favorites.`,
+        description: `${product.name} has been ${
+          isFavorited ? "removed from" : "added to"
+        } your favorites.`,
       });
     } catch (error) {
       toast({
@@ -93,127 +95,143 @@ export default function ProductCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      whileHover={{ y: -5 }}
-      className="group"
+      initial={{ opacity: 0, scale: 0.98, y: 12 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      whileHover={{ scale: 1.03, y: -5, boxShadow: "0 12px 20px rgba(0,0,0,0.12)" }}
+      className="group cursor-pointer select-none"
     >
-      <Card className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white dark:bg-slate-900">
-        <div className="relative overflow-hidden">
+      <Card className="relative rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-300">
+        {/* Image */}
+        <div className="relative overflow-hidden rounded-t-xl">
           <Link href={`/product/${product.id}`}>
-            <img
+            <motion.img
               src={
                 product.image_url ||
                 "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=80"
               }
               alt={product.name}
-              className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-64 object-cover"
+              initial={{ scale: 1 }}
+              whileHover={{ scale: 1.05, boxShadow: "0 8px 16px rgba(0,0,0,0.1)" }}
+              transition={{ duration: 0.4 }}
+              loading="lazy"
+              draggable={false}
             />
           </Link>
 
           {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-2">
+          <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
             {product.is_on_sale && (
-              <Badge variant="destructive" className="text-xs font-bold">
+              <Badge
+                variant="destructive"
+                className="text-xs font-semibold bg-red-100 text-red-700 border-none shadow-sm"
+              >
                 SALE
               </Badge>
             )}
             {product.is_featured && (
-              <Badge className="text-xs font-bold bg-purple-600 hover:bg-purple-700">
+              <Badge
+                className="text-xs font-semibold bg-yellow-100 text-yellow-800 border-none shadow-sm"
+              >
                 FEATURED
               </Badge>
             )}
           </div>
 
-          {/* Favorite Button */}
+          {/* Favorite */}
           {showFavorite && (
             <motion.button
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleAddToFavorites}
-              className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors"
+              aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+              className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-gray-900 rounded-full shadow text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               <Heart
-                className={`w-4 h-4 ${isFavorited ? "fill-red-500 text-red-500" : "text-gray-600"}`}
+                className={`w-5 h-5 transition-colors ${
+                  isFavorited ? "fill-red-500 text-red-500" : ""
+                }`}
               />
             </motion.button>
           )}
         </div>
 
-        <CardContent className="p-4">
+        {/* Content */}
+        <CardContent className="px-6 py-5 text-gray-900 dark:text-gray-100">
           <Link href={`/product/${product.id}`}>
-            <h3 className="font-semibold text-lg mb-2 text-gray-900 dark:text-white hover:text-purple-600 transition-colors">
+            <motion.h3
+              className="font-semibold text-lg mb-1 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              whileHover={{ scale: 1.02 }}
+              tabIndex={0}
+            >
               {product.name}
-            </h3>
+            </motion.h3>
           </Link>
 
           {product.description && (
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
               {product.description}
             </p>
           )}
 
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
-              ${displayPrice}
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+              ${displayPrice.toFixed(2)}
             </span>
             {originalPrice && (
-              <span className="text-sm text-gray-500 line-through">
-                ${originalPrice}
+              <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
+                ${originalPrice.toFixed(2)}
               </span>
             )}
           </div>
 
-          {/* Rating */}
-          <div className="flex items-center gap-1 mb-3">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className="w-4 h-4 fill-yellow-400 text-yellow-400"
-              />
-            ))}
-            <span className="text-sm text-gray-600 dark:text-gray-300 ml-1">
-              (4.8)
-            </span>
-          </div>
-
-          {/* Stock Status */}
+          {/* Stock status */}
           {product.stock_quantity !== undefined && (
-            <div className="mb-3">
+            <div>
               {product.stock_quantity > 0 ? (
-                <span className="text-sm text-green-600 font-medium">
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-800 font-medium tracking-wide text-xs"
+                >
                   In Stock ({product.stock_quantity} available)
-                </span>
+                </motion.span>
               ) : (
-                <span className="text-sm text-red-600 font-medium">
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="inline-block px-3 py-1 rounded-full bg-red-100 text-red-800 font-medium tracking-wide"
+                >
                   Out of Stock
-                </span>
+                </motion.span>
               )}
             </div>
           )}
         </CardContent>
 
+        {/* Add to Cart */}
         {showAddToCart && (
-          <CardFooter className="p-4 pt-0">
-            <motion.div className="w-full">
+          <CardFooter className="px-6 pb-6 pt-0">
+            <motion.div className="w-full" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button
                 onClick={handleAddToCart}
                 disabled={
                   isLoading ||
-                  (product.stock_quantity !== undefined &&
-                    product.stock_quantity <= 0)
+                  (product.stock_quantity !== undefined && product.stock_quantity <= 0)
                 }
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200"
+                className="w-full bg-[#F5DEB3] hover:bg-[#36454F] focus:ring-indigo-500 text-white font-semibold py-3 rounded-lg shadow-md transition-all duration-300 flex items-center justify-center gap-3 select-none"
+                aria-label="Add product to cart"
               >
-                <motion.div
-                  className="flex items-center justify-center gap-2"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <ShoppingCart className="w-4 h-4" />
-                  {isLoading ? "Adding..." : "Add to Cart"}
-                </motion.div>
+                {isLoading ? (
+                  <motion.div
+                    className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <ShoppingCart className="w-5 h-5" />
+                )}
+                {isLoading ? "Adding..." : "Add to Cart"}
               </Button>
             </motion.div>
           </CardFooter>

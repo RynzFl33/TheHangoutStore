@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "../../../supabase/client";
+import type { User } from "@supabase/supabase-js"; // <-- Add this import
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -44,7 +45,9 @@ export default function OrdersPage() {
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<import('@supabase/supabase-js').User | null>(null);
+  const [user, setUser] = useState<User | null>(null); // <-- Fix type here
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState<Order | null>(null);
   const router = useRouter();
   const supabase = createClient();
 
@@ -101,6 +104,24 @@ export default function OrdersPage() {
   const handleViewOrder = (order: Order) => {
     setSelectedOrder(order);
     setIsViewDialogOpen(true);
+  };
+
+  const handleDeleteOrder = async () => {
+    if (!orderToDelete) return;
+    try {
+      const { error } = await supabase.from("orders").delete().eq("id", orderToDelete.id);
+      if (error) {
+        alert("Failed to delete order.");
+        return;
+      }
+      setOrders((prev) => prev.filter((o) => o.id !== orderToDelete.id));
+      setFilteredOrders((prev) => prev.filter((o) => o.id !== orderToDelete.id));
+      setIsViewDialogOpen(false);
+      setShowDeleteDialog(false);
+      setOrderToDelete(null);
+    } catch (err) {
+      alert("An error occurred while deleting the order.");
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -342,8 +363,37 @@ export default function OrdersPage() {
                   ))}
                 </div>
               </div>
+              <div className="flex justify-end">
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    setOrderToDelete(selectedOrder);
+                    setShowDeleteDialog(true);
+                  }}
+                >
+                  Delete Order
+                </Button>
+              </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Order</DialogTitle>
+          </DialogHeader>
+          <p>Are you sure you want to delete this order?</p>
+          <div className="flex justify-end gap-2 mt-4">
+            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteOrder}>
+              Delete
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
 

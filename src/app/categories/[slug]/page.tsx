@@ -118,14 +118,13 @@ function ProductGrid({ products }: { products: Product[] }) {
   );
 }
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function CategoryPage(props: { params: Promise<{ slug: string }> }) {
+  const { params } = props;
+  const { slug } = await params;
+
   const [category, products] = await Promise.all([
-    getCategory(params.slug),
-    getCategoryProducts(params.slug),
+    getCategory(slug),
+    getCategoryProducts(slug),
   ]);
 
   if (!category) {

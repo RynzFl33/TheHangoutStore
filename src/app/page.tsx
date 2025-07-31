@@ -140,49 +140,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-gradient-to-r from-purple-600 to-pink-600 text-white">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-5xl font-bold mb-2">50K+</div>
-              <div className="text-purple-100">Happy Customers</div>
-            </div>
-            <div>
-              <div className="text-5xl font-bold mb-2">1000+</div>
-              <div className="text-purple-100">Products Available</div>
-            </div>
-            <div>
-              <div className="text-5xl font-bold mb-2">4.9★</div>
-              <div className="text-purple-100">Customer Rating</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Newsletter Section */}
-      <section className="py-20 bg-white dark:bg-slate-900">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-            Stay in the Loop
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-            Get the latest drops, exclusive deals, and style inspiration
-            delivered to your inbox.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-6 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-            <button className="px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
-              Subscribe
-            </button>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-slate-900 to-purple-900 text-white">
         <div className="container mx-auto px-4 text-center">
