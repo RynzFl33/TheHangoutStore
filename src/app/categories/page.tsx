@@ -1,9 +1,10 @@
 import { createClient } from "../../../supabase/server";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 interface Category {
@@ -23,6 +24,7 @@ interface Subcategory {
   description: string;
   image_url: string;
   product_count?: number;
+  products?: { count: number }[];
 }
 
 async function getCategories() {
@@ -52,7 +54,7 @@ async function getCategories() {
     ...category,
     product_count: category.products?.[0]?.count || 0,
     subcategories:
-      category.subcategories?.map((sub: any) => ({
+      category.subcategories?.map((sub: Subcategory) => ({
         ...sub,
         product_count: sub.products?.[0]?.count || 0,
       })) || [],
@@ -109,10 +111,13 @@ export default async function CategoriesPage() {
                   >
                     <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer bg-white dark:bg-slate-900">
                       <div className="relative overflow-hidden">
-                        <img
+                        <Image
                           src={subcategory.image_url}
                           alt={subcategory.name}
-                          className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                          width={500}
+                          height={128}
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          style={{ width: "100%", height: "auto" }}
                         />
                         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
 
@@ -158,10 +163,12 @@ export default async function CategoriesPage() {
               <Link href="/categories/hoodies">
                 <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer h-full bg-white dark:bg-slate-900">
                   <div className="relative overflow-hidden h-64 lg:h-full">
-                    <img
+                    <Image
                       src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80"
                       alt="Hoodies Collection"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      width={800}
+                      height={512} // or appropriate height to maintain aspect ratio
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                     <div className="absolute bottom-6 left-6 text-white">
@@ -185,10 +192,12 @@ export default async function CategoriesPage() {
               <Link href="/categories/tees">
                 <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer bg-white dark:bg-slate-900">
                   <div className="relative overflow-hidden h-24">
-                    <img
+                    <Image
                       src="https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=600&q=80"
                       alt="T-Shirts Collection"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      width={600}
+                      height={360}
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
                     <div className="absolute inset-0 flex items-center left-4 text-white">
@@ -206,10 +215,12 @@ export default async function CategoriesPage() {
               <Link href="/categories/streetwear">
                 <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer bg-white dark:bg-slate-900">
                   <div className="relative overflow-hidden h-24">
-                    <img
+                    <Image
                       src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80"
                       alt="Streetwear Collection"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      width={600}
+                      height={360}
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
                     <div className="absolute inset-0 flex items-center left-4 text-white">
@@ -227,10 +238,12 @@ export default async function CategoriesPage() {
               <Link href="/categories/accessories">
                 <Card className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer bg-white dark:bg-slate-900">
                   <div className="relative overflow-hidden h-24">
-                    <img
+                    <Image
                       src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&q=80"
                       alt="Accessories Collection"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      width={600}
+                      height={360}
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
                     <div className="absolute inset-0 flex items-center left-4 text-white">

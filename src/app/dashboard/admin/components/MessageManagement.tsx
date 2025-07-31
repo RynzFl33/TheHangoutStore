@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { createClient } from "../../../../../supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,7 +26,6 @@ import {
   MailOpen,
   Reply,
   Eye,
-  Clock,
   CheckCircle,
   RefreshCw,
 } from "lucide-react";
@@ -56,11 +55,7 @@ export default function MessageManagement() {
   const { toast } = useToast();
   const supabase = createClient();
 
-  useEffect(() => {
-    fetchMessages();
-  }, []);
-
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     setIsLoading(true);
     try {
       const { data, error } = await supabase
@@ -80,7 +75,11 @@ export default function MessageManagement() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [supabase, toast]);
+
+  useEffect(() => {
+    fetchMessages();
+  }, [fetchMessages]);
 
   const handleViewMessage = async (message: Message) => {
     setSelectedMessage(message);
@@ -98,25 +97,24 @@ export default function MessageManagement() {
     setIsReplyDialogOpen(true);
   };
 
-  const updateMessageStatus = async (messageId: string, status: string) => {
-    try {
-      const { error } = await supabase
-        .from("messages")
-        .update({ status, updated_at: new Date().toISOString() })
-        .eq("id", messageId);
+const updateMessageStatus = async (messageId: string, status: "unread" | "read" | "replied") => {
+  try {
+    const { error } = await supabase
+      .from("messages")
+      .update({ status, updated_at: new Date().toISOString() })
+      .eq("id", messageId);
 
-      if (error) throw error;
+    if (error) throw error;
 
-      // Update local state
-      setMessages(
-        messages.map((msg) =>
-          msg.id === messageId ? { ...msg, status: status as any } : msg,
-        ),
-      );
-    } catch (error) {
-      console.error("Error updating message status:", error);
-    }
-  };
+    setMessages(
+      messages.map((msg) =>
+        msg.id === messageId ? { ...msg, status } : msg,
+      ),
+    );
+  } catch (error) {
+    console.error("Error updating message status:", error);
+  }
+};
 
   const handleSendReply = async () => {
     if (!selectedMessage || !replyText.trim()) return;
@@ -141,18 +139,18 @@ export default function MessageManagement() {
       if (error) throw error;
 
       // Update local state
-      setMessages(
-        messages.map((msg) =>
-          msg.id === selectedMessage.id
-            ? {
-                ...msg,
-                admin_reply: replyText,
-                status: "replied" as any,
-                replied_at: new Date().toISOString(),
-              }
-            : msg,
-        ),
-      );
+setMessages(
+  messages.map((msg) =>
+    msg.id === selectedMessage.id
+      ? {
+          ...msg,
+          admin_reply: replyText,
+          status: "replied",
+          replied_at: new Date().toISOString(),
+        }
+      : msg,
+  ),
+);
 
       toast({
         title: "Reply Sent",

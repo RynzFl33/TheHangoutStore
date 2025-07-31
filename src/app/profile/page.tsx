@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import Image from "next/image";
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -63,16 +64,22 @@ export default async function ProfilePage() {
             <CardHeader className="text-center">
               <div className="flex justify-center mb-4">
                 {userProfile?.avatar_url ? (
-                  <img
-                    src={userProfile.avatar_url}
-                    alt="Profile"
-                    className="w-24 h-24 rounded-full object-cover border-4 border-primary/20"
-                  />
+                  <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-primary/20">
+                    <Image
+                      src={userProfile.avatar_url}
+                      alt="Profile"
+                      fill
+                      sizes="96px" // since w-24/h-24 = 96px
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
                 ) : (
                   <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
                     <UserCircle className="w-16 h-16 text-primary" />
                   </div>
                 )}
+
               </div>
               <CardTitle className="text-2xl">
                 {userProfile?.full_name || userProfile?.name || "User"}

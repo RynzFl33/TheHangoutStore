@@ -33,19 +33,28 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  RefreshCw,
 } from "lucide-react";
 import { createClient } from "../../../../../../supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+
+interface OrderedProduct {
+  id: string;
+  name: string;
+  size?: string;
+  color?: string;
+  quantity: number;
+  price: number;
+}
+
 
 interface Order {
   id: string;
   user_id?: string;
   user_email?: string;
-  product_ids: any[];
-  order_code: string;
+  product_ids: OrderedProduct[];
   total_amount: number;
   status: string;
+  order_code: string;
   created_at: string;
   updated_at: string;
 }
@@ -201,9 +210,9 @@ export default function OrderManagement({
     }).format(price);
   };
 
-  const getTotalProducts = (productIds: any[]) => {
-    return productIds.reduce((sum, item) => sum + (item.quantity || 1), 0);
-  };
+const getTotalProducts = (productIds: OrderedProduct[]) => {
+  return productIds.reduce((sum, item) => sum + (item.quantity || 1), 0);
+};
 
   return (
     <Card className="bg-white dark:bg-gray-800 shadow-lg">

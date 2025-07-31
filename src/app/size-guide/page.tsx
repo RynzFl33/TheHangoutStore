@@ -333,7 +333,7 @@ export default function SizeGuidePage() {
                       similar garment you own
                     </li>
                     <li>
-                      • If you're between sizes, we recommend sizing up for a
+                      • If you&apos;re between sizes, we recommend sizing up for a
                       more comfortable fit
                     </li>
                     <li>
@@ -342,7 +342,7 @@ export default function SizeGuidePage() {
                     </li>
                     <li>
                       • Contact us if you need help choosing the right size -
-                      we're here to help!
+                      we&apos;re here to help!
                     </li>
                   </ul>
                 </div>

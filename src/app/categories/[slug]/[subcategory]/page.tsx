@@ -4,6 +4,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
 import {
   Select,
   SelectContent,
@@ -12,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Search, ArrowLeft } from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -163,10 +164,12 @@ export default async function SubcategoryPage({
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-purple-600 to-pink-600 text-white py-16 overflow-hidden">
         <div className="absolute inset-0">
-          <img
+          <Image
             src={subcategory.image_url}
             alt={subcategory.name}
-            className="w-full h-full object-cover opacity-20"
+            fill
+            style={{ objectFit: "cover", opacity: 0.2 }}
+            priority
           />
         </div>
         <div className="relative container mx-auto px-4">

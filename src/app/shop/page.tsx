@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Search, Filter } from "lucide-react";
+import { Search} from "lucide-react";
 import Link from "next/link";
 
 interface Product {
@@ -246,7 +246,7 @@ export default async function ShopPage() {
                 Featured Collection
               </h2>
               <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
-                Editor's Choice
+                Editor&apos;s Choice
               </Badge>
             </div>
             <Suspense fallback={<div>Loading featured products...</div>}>

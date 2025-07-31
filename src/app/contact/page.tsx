@@ -3,11 +3,9 @@
 import { motion } from "framer-motion";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Mail, Phone, MapPin, Clock, Send, MessageCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, MessageCircle } from "lucide-react";
 import ContactForm from "@/components/contact-form";
 
 export default function ContactPage() {
@@ -31,8 +29,8 @@ export default function ContactPage() {
             transition={{ delay: 0.1 }}
             className="text-xl text-purple-100 max-w-2xl mx-auto"
           >
-            We'd love to hear from you. Send us a message and we'll respond as
-            soon as possible.
+            We&apos;d love to hear from you. Send us a message and we&apos;ll respond as soon as possible.
+
           </motion.p>
         </div>
       </section>
@@ -180,7 +178,7 @@ export default function ContactPage() {
             <Card className="bg-gradient-to-r from-purple-600 to-pink-600 text-white">
               <CardContent className="p-6 text-center">
                 <h3 className="text-lg font-semibold mb-2">
-                  We're Here to Help!
+                  We&apos;re Here to Help!
                 </h3>
                 <p className="text-purple-100">
                   Average response time: <strong>2-4 hours</strong>

@@ -5,6 +5,19 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "../../supabase/server";
 
+interface CartItem {
+  products: {
+    id: string;
+    name: string;
+    price: number;
+    sale_price?: number;
+  };
+  quantity: number;
+  size: string;
+  color: string;
+}
+
+
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
@@ -331,11 +344,12 @@ export const placeOrderAction = async (formData: FormData) => {
   } = await supabase.auth.getUser();
 
   let cartItems;
-  try {
-    cartItems = JSON.parse(cartItemsJson);
-  } catch (error) {
-    return { success: false, error: "Invalid cart data" };
-  }
+try {
+  cartItems = JSON.parse(cartItemsJson);
+} catch (error) {
+  console.error("JSON parse error:", error);
+  return { success: false, error: "Invalid cart data" };
+}
 
   // Generate unique order code
   let orderCode = generateOrderCode();
@@ -363,28 +377,30 @@ export const placeOrderAction = async (formData: FormData) => {
   }
 
   // Prepare product data for the order
-  const productIds = cartItems.map((item: any) => ({
-    product_id: item.products.id,
-    name: item.products.name,
-    price: item.products.sale_price || item.products.price,
-    quantity: item.quantity,
-    size: item.size,
-    color: item.color,
-  }));
+const productIds = (cartItems as CartItem[]).map((item) => ({
+  product_id: item.products.id,
+  name: item.products.name,
+  price: item.products.sale_price ?? item.products.price,
+  quantity: item.quantity,
+  size: item.size,
+  color: item.color,
+}));
+
 
   // Create the order
-  const { data: order, error } = await supabase
-    .from("orders")
-    .insert({
-      user_id: user?.id || null,
-      user_email: user?.email || null,
-      product_ids: productIds,
-      order_code: orderCode,
-      total_amount: totalAmount,
-      status: "pending",
-    })
-    .select()
-    .single();
+const { error } = await supabase
+  .from("orders")
+  .insert({
+    user_id: user?.id || null,
+    user_email: user?.email || null,
+    product_ids: productIds,
+    order_code: orderCode,
+    total_amount: totalAmount,
+    status: "pending",
+  })
+  .select()
+  .single();
+
 
   if (error) {
     console.error("Error creating order:", error);
