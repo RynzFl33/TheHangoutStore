@@ -36,14 +36,14 @@ export default function DashboardNavbar() {
   }, [supabase]);
 
   return (
-    <nav className="w-full border-b border-gray-200 bg-white py-4">
+    <nav className="w-full border-b border-gray-200 bg-[#36454F] py-4">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center gap-4">
-          <Link href="/" prefetch className="text-xl font-bold">
-            Logo
+          <Link href="/" prefetch className="text-xl font-bold text-[#F5DEB3]">
+            TheHangout Store
           </Link>
         </div>
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 items-center text-white">
           {userRole === "admin" && (
             <>
               <Link href="/dashboard/admin">

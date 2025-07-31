@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "../../../supabase/client";
@@ -40,7 +39,6 @@ function CartItemCard({ item }: { item: CartItem }) {
     <Card className="mb-4 bg-white dark:bg-slate-900">
       <CardContent className="p-6">
         <div className="flex flex-col md:flex-row gap-4">
-          {/* Product Image */}
           <div className="w-full md:w-32 h-32 flex-shrink-0">
             <Image
               src={product.image_url}
@@ -51,7 +49,6 @@ function CartItemCard({ item }: { item: CartItem }) {
             />
           </div>
 
-          {/* Product Details */}
           <div className="flex-1">
             <div className="flex flex-col md:flex-row md:justify-between md:items-start">
               <div className="mb-4 md:mb-0">
@@ -60,12 +57,8 @@ function CartItemCard({ item }: { item: CartItem }) {
                 </h3>
 
                 <div className="flex gap-2 mb-2">
-                  {item.size && (
-                    <Badge variant="outline">Size: {item.size}</Badge>
-                  )}
-                  {item.color && (
-                    <Badge variant="outline">Color: {item.color}</Badge>
-                  )}
+                  {item.size && <Badge variant="outline">Size: {item.size}</Badge>}
+                  {item.color && <Badge variant="outline">Color: {item.color}</Badge>}
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -80,15 +73,12 @@ function CartItemCard({ item }: { item: CartItem }) {
                 </div>
               </div>
 
-              {/* Quantity and Actions */}
               <div className="flex flex-col items-end gap-3">
                 <div className="flex items-center gap-2">
                   <Button variant="outline" size="sm" className="w-8 h-8 p-0">
                     <Minus className="w-4 h-4" />
                   </Button>
-                  <span className="w-12 text-center font-medium">
-                    {item.quantity}
-                  </span>
+                  <span className="w-12 text-center font-medium">{item.quantity}</span>
                   <Button variant="outline" size="sm" className="w-8 h-8 p-0">
                     <Plus className="w-4 h-4" />
                   </Button>
@@ -98,7 +88,6 @@ function CartItemCard({ item }: { item: CartItem }) {
                   <div className="text-lg font-bold text-gray-900 dark:text-white">
                     ${itemTotal.toFixed(2)}
                   </div>
-
                   <form action={removeFromCartAction} className="mt-2">
                     <input type="hidden" name="cartItemId" value={item.id} />
                     <Button
@@ -136,19 +125,18 @@ function CartSummary({
   }, 0);
 
   const shipping = subtotal > 50 ? 0 : 9.99;
-  const tax = subtotal * 0.08; // 8% tax
+  const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
 
   const handlePlaceOrder = async () => {
     setIsPlacingOrder(true);
     try {
-      // Create order directly using Supabase client
       const supabase = createClient();
       const {
         data: { user },
       } = await supabase.auth.getUser();
 
-      // Generate unique order code
+      // ✅ Generate order code like "ORDER-XLCEWE"
       const generateOrderCode = () => {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         let result = "ORDER-";
@@ -158,32 +146,8 @@ function CartSummary({
         return result;
       };
 
-      let orderCode = generateOrderCode();
-      let isUnique = false;
-      let attempts = 0;
+      const orderCode = generateOrderCode();
 
-      // Ensure order code is unique
-      while (!isUnique && attempts < 10) {
-        const { data: existingOrder } = await supabase
-          .from("orders")
-          .select("id")
-          .eq("order_code", orderCode)
-          .single();
-
-        if (!existingOrder) {
-          isUnique = true;
-        } else {
-          orderCode = generateOrderCode();
-          attempts++;
-        }
-      }
-
-      if (!isUnique) {
-        console.error("Failed to generate unique order code");
-        return;
-      }
-
-      // Prepare product data for the order
       const productIds = items.map((item) => ({
         product_id: item.products.id,
         name: item.products.name,
@@ -193,8 +157,7 @@ function CartSummary({
         color: item.color,
       }));
 
-      // Create the order
-      const { data: error } = await supabase
+      const { error } = await supabase
         .from("orders")
         .insert({
           user_id: user?.id || null,
@@ -212,7 +175,6 @@ function CartSummary({
         return;
       }
 
-      // Clear the user's cart after successful order
       if (user) {
         await supabase.from("cart_items").delete().eq("user_id", user.id);
       }
@@ -228,47 +190,33 @@ function CartSummary({
   return (
     <Card className="bg-white dark:bg-slate-900">
       <CardHeader>
-        <CardTitle className="text-gray-900 dark:text-white">
-          Order Summary
-        </CardTitle>
+        <CardTitle className="text-gray-900 dark:text-white">Order Summary</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex justify-between">
           <span className="text-gray-600 dark:text-gray-300">Subtotal</span>
-          <span className="font-medium text-gray-900 dark:text-white">
-            ${subtotal.toFixed(2)}
-          </span>
+          <span className="font-medium text-gray-900 dark:text-white">${subtotal.toFixed(2)}</span>
         </div>
-
         <div className="flex justify-between">
           <span className="text-gray-600 dark:text-gray-300">Shipping</span>
           <span className="font-medium text-gray-900 dark:text-white">
-            {shipping === 0 ? "Free" : `${shipping.toFixed(2)}`}
+            {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
           </span>
         </div>
-
         <div className="flex justify-between">
           <span className="text-gray-600 dark:text-gray-300">Tax</span>
-          <span className="font-medium text-gray-900 dark:text-white">
-            ${tax.toFixed(2)}
-          </span>
+          <span className="font-medium text-gray-900 dark:text-white">${tax.toFixed(2)}</span>
         </div>
-
         <hr className="border-gray-200 dark:border-gray-700" />
-
         <div className="flex justify-between text-lg font-bold">
           <span className="text-gray-900 dark:text-white">Total</span>
-          <span className="text-gray-900 dark:text-white">
-            ${total.toFixed(2)}
-          </span>
+          <span className="text-gray-900 dark:text-white">${total.toFixed(2)}</span>
         </div>
-
         {shipping > 0 && (
           <p className="text-sm text-gray-600 dark:text-gray-300">
             Add ${(50 - subtotal).toFixed(2)} more for free shipping!
           </p>
         )}
-
         <Button
           onClick={handlePlaceOrder}
           disabled={isPlacingOrder}
@@ -276,7 +224,6 @@ function CartSummary({
         >
           {isPlacingOrder ? "Placing Order..." : "Place Order"}
         </Button>
-
         <Link href="/shop">
           <Button variant="outline" className="w-full">
             Continue Shopping
@@ -291,7 +238,6 @@ export default function CartPage() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [, setLoading] = useState(false);
   const [, setUser] = useState<User | null>(null);
-
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [orderCode, setOrderCode] = useState("");
   const [orderTotal, setOrderTotal] = useState(0);
@@ -313,7 +259,6 @@ export default function CartPage() {
 
   useEffect(() => {
     let isMounted = true;
-
     const getCartItems = async () => {
       setLoading(true);
       try {
@@ -323,21 +268,21 @@ export default function CartPage() {
           return;
         }
 
-        if (isMounted) setUser(supaUser); // only for storing, not needed below
+        if (isMounted) setUser(supaUser);
 
         const { data: cartItems, error } = await supabase
           .from("cart_items")
           .select(`
-          *,
-          products (
-            id,
-            name,
-            price,
-            sale_price,
-            image_url,
-            stock_quantity
-          )
-        `)
+            *,
+            products (
+              id,
+              name,
+              price,
+              sale_price,
+              image_url,
+              stock_quantity
+            )
+          `)
           .eq("user_id", supaUser.id)
           .order("created_at", { ascending: false });
 
@@ -360,28 +305,23 @@ export default function CartPage() {
     };
 
     getCartItems();
-
     return () => {
       isMounted = false;
     };
   }, [supabase, router]);
 
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
       <Navbar />
-
       <div className="container mx-auto px-4 py-12">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Shopping Cart
           </h1>
           <p className="text-gray-600 dark:text-gray-300">
-            {cartItems.length} {cartItems.length === 1 ? "item" : "items"} in
-            your cart
+            {cartItems.length} {cartItems.length === 1 ? "item" : "items"} in your cart
           </p>
         </div>
-
         {cartItems.length === 0 ? (
           <div className="text-center py-16">
             <ShoppingBag className="w-16 h-16 text-gray-400 mx-auto mb-4" />
@@ -399,21 +339,13 @@ export default function CartPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Cart Items */}
             <div className="lg:col-span-2">
               {cartItems.map((item) => (
                 <CartItemCard key={item.id} item={item} />
               ))}
             </div>
-
-            {/* Cart Summary */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-4">
-                <CartSummary
-                  items={cartItems}
-                  onOrderPlaced={handleOrderPlaced}
-                />
-              </div>
+            <div className="lg:col-span-1 sticky top-4">
+              <CartSummary items={cartItems} onOrderPlaced={handleOrderPlaced} />
             </div>
           </div>
         )}

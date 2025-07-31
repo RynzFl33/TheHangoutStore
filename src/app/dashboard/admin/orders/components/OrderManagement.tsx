@@ -46,7 +46,6 @@ interface OrderedProduct {
   price: number;
 }
 
-
 interface Order {
   id: string;
   user_id?: string;
@@ -94,7 +93,6 @@ export default function OrderManagement({
 
       if (error) throw error;
 
-      // Update local state
       const updatedOrders = orders.map((order) =>
         order.id === orderId
           ? {
@@ -116,6 +114,35 @@ export default function OrderManagement({
       toast({
         title: "Error",
         description: "Failed to update order status",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUpdating(null);
+    }
+  };
+
+  const handleDeleteOrder = async (orderId: string) => {
+    const confirmed = window.confirm("Are you sure you want to delete this order?");
+    if (!confirmed) return;
+
+    setIsUpdating(orderId);
+    try {
+      const { error } = await supabase.from("orders").delete().eq("id", orderId);
+      if (error) throw error;
+
+      const updatedOrders = orders.filter((order) => order.id !== orderId);
+      setOrders(updatedOrders);
+      applyFilters(updatedOrders, searchTerm, statusFilter);
+
+      toast({
+        title: "Order Deleted",
+        description: "The order has been successfully deleted.",
+      });
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete the order",
         variant: "destructive",
       });
     } finally {
@@ -210,9 +237,9 @@ export default function OrderManagement({
     }).format(price);
   };
 
-const getTotalProducts = (productIds: OrderedProduct[]) => {
-  return productIds.reduce((sum, item) => sum + (item.quantity || 1), 0);
-};
+  const getTotalProducts = (productIds: OrderedProduct[]) => {
+    return productIds.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  };
 
   return (
     <Card className="bg-white dark:bg-gray-800 shadow-lg">
@@ -327,9 +354,7 @@ const getTotalProducts = (productIds: OrderedProduct[]) => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="processing">
-                              Processing
-                            </SelectItem>
+                            <SelectItem value="processing">Processing</SelectItem>
                             <SelectItem value="shipped">Shipped</SelectItem>
                             <SelectItem value="delivered">Delivered</SelectItem>
                             <SelectItem value="cancelled">Cancelled</SelectItem>
@@ -342,13 +367,21 @@ const getTotalProducts = (productIds: OrderedProduct[]) => {
                         {formatDate(order.created_at)}
                       </div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="flex gap-2">
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => handleViewOrder(order)}
                       >
                         <Eye className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleDeleteOrder(order.id)}
+                        disabled={isUpdating === order.id}
+                      >
+                        <XCircle className="w-4 h-4" />
                       </Button>
                     </TableCell>
                   </TableRow>
