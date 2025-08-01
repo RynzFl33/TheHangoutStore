@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import {
   Table,
@@ -28,6 +29,7 @@ import {
   Eye,
   CheckCircle,
   RefreshCw,
+  Trash2,
 } from "lucide-react";
 
 interface Message {
@@ -49,6 +51,8 @@ export default function MessageManagement() {
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [isReplyDialogOpen, setIsReplyDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [messageToDelete, setMessageToDelete] = useState<Message | null>(null);
   const [replyText, setReplyText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isReplying, setIsReplying] = useState(false);
@@ -85,7 +89,6 @@ export default function MessageManagement() {
     setSelectedMessage(message);
     setIsViewDialogOpen(true);
 
-    // Mark as read if unread
     if (message.status === "unread") {
       await updateMessageStatus(message.id, "read");
     }
@@ -97,24 +100,25 @@ export default function MessageManagement() {
     setIsReplyDialogOpen(true);
   };
 
-const updateMessageStatus = async (messageId: string, status: "unread" | "read" | "replied") => {
-  try {
-    const { error } = await supabase
-      .from("messages")
-      .update({ status, updated_at: new Date().toISOString() })
-      .eq("id", messageId);
+  const updateMessageStatus = async (
+    messageId: string,
+    status: "unread" | "read" | "replied"
+  ) => {
+    try {
+      const { error } = await supabase
+        .from("messages")
+        .update({ status, updated_at: new Date().toISOString() })
+        .eq("id", messageId);
 
-    if (error) throw error;
+      if (error) throw error;
 
-    setMessages(
-      messages.map((msg) =>
-        msg.id === messageId ? { ...msg, status } : msg,
-      ),
-    );
-  } catch (error) {
-    console.error("Error updating message status:", error);
-  }
-};
+      setMessages(
+        messages.map((msg) => (msg.id === messageId ? { ...msg, status } : msg))
+      );
+    } catch (error) {
+      console.error("Error updating message status:", error);
+    }
+  };
 
   const handleSendReply = async () => {
     if (!selectedMessage || !replyText.trim()) return;
@@ -138,19 +142,18 @@ const updateMessageStatus = async (messageId: string, status: "unread" | "read" 
 
       if (error) throw error;
 
-      // Update local state
-setMessages(
-  messages.map((msg) =>
-    msg.id === selectedMessage.id
-      ? {
-          ...msg,
-          admin_reply: replyText,
-          status: "replied",
-          replied_at: new Date().toISOString(),
-        }
-      : msg,
-  ),
-);
+      setMessages(
+        messages.map((msg) =>
+          msg.id === selectedMessage.id
+            ? {
+                ...msg,
+                admin_reply: replyText,
+                status: "replied",
+                replied_at: new Date().toISOString(),
+              }
+            : msg
+        )
+      );
 
       toast({
         title: "Reply Sent",
@@ -169,6 +172,37 @@ setMessages(
       });
     } finally {
       setIsReplying(false);
+    }
+  };
+
+  const handleDeleteMessage = async () => {
+    if (!messageToDelete) return;
+
+    setIsLoading(true);
+    try {
+      const { error } = await supabase
+        .from("messages")
+        .delete()
+        .eq("id", messageToDelete.id);
+
+      if (error) throw error;
+
+      setMessages(messages.filter((msg) => msg.id !== messageToDelete.id));
+      toast({
+        title: "Message Deleted",
+        description: "The message has been successfully deleted",
+      });
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete message",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+      setIsDeleteDialogOpen(false);
+      setMessageToDelete(null);
     }
   };
 
@@ -299,6 +333,17 @@ setMessages(
                           onClick={() => handleReplyMessage(message)}
                         >
                           <Reply className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="text-red-500 hover:bg-red-50 hover:text-red-600"
+                          onClick={() => {
+                            setMessageToDelete(message);
+                            setIsDeleteDialogOpen(true);
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
                     </TableCell>
@@ -432,6 +477,51 @@ setMessages(
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Delete Message</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-gray-600 dark:text-gray-300">
+              Are you sure you want to delete this message from{" "}
+              <span className="font-semibold">
+                {messageToDelete?.name} ({messageToDelete?.email})
+              </span>?
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              This action cannot be undone.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteMessage}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Delete
+                </>
+              )}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </Card>
