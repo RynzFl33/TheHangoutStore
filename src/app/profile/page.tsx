@@ -103,12 +103,12 @@ export default async function ProfilePage() {
                     <User className="w-5 h-5" />
                     Profile Overview
                   </Link>
-                  <Link href="#" className="flex items-center gap-3 p-3 hover:bg-[#e6f0f0] dark:hover:bg-[#003332] rounded-lg text-[#5a7270] dark:text-[#9bb0b3] transition-colors">
+                  <Link href="/orders" className="flex items-center gap-3 p-3 hover:bg-[#e6f0f0] dark:hover:bg-[#003332] rounded-lg text-[#5a7270] dark:text-[#9bb0b3] transition-colors">
                     <ShoppingBag className="w-5 h-5" />
                     My Orders
                     <Badge className="ml-auto bg-[#034C36] text-white">{orderCount || 0}</Badge>
                   </Link>
-                  <Link href="#" className="flex items-center gap-3 p-3 hover:bg-[#e6f0f0] dark:hover:bg-[#003332] rounded-lg text-[#5a7270] dark:text-[#9bb0b3] transition-colors">
+                  <Link href="/favorites" className="flex items-center gap-3 p-3 hover:bg-[#e6f0f0] dark:hover:bg-[#003332] rounded-lg text-[#5a7270] dark:text-[#9bb0b3] transition-colors">
                     <Heart className="w-5 h-5" />
                     My Favorites
                     <Badge className="ml-auto bg-[#034C36] text-white">{favoritesCount || 0}</Badge>
