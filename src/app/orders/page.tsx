@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "../../../supabase/client";
-import type { User } from "@supabase/supabase-js"; // <-- Add this import
+import { createClient } from "../../supabase/client";
+import type { User } from "@supabase/supabase-js";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -34,7 +34,6 @@ interface Product {
   price: number;
 }
 
-
 interface Order {
   id: string;
   user_id?: string;
@@ -47,7 +46,6 @@ interface Order {
   updated_at: string;
 }
 
-
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
@@ -55,7 +53,7 @@ export default function OrdersPage() {
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
-  const [, setUser] = useState<User | null>(null); // <-- Fix type here
+  const [, setUser] = useState<User | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [orderToDelete, setOrderToDelete] = useState<Order | null>(null);
   const router = useRouter();
@@ -138,35 +136,35 @@ export default function OrdersPage() {
     switch (status) {
       case "pending":
         return (
-          <Badge variant="secondary">
+          <Badge className="bg-[#003332]/20 text-[#003332] dark:text-[#BDCDCF] border border-[#003332]/30">
             <Clock className="w-3 h-3 mr-1" />
             Pending
           </Badge>
         );
       case "processing":
         return (
-          <Badge className="bg-blue-600">
+          <Badge className="bg-[#034C36]/30 text-[#034C36] dark:text-[#BDCDCF] border border-[#034C36]/40">
             <Package className="w-3 h-3 mr-1" />
             Processing
           </Badge>
         );
       case "shipped":
         return (
-          <Badge className="bg-green-600">
+          <Badge className="bg-[#006D77]/20 text-[#006D77] dark:text-[#BDCDCF] border border-[#006D77]/30">
             <CheckCircle className="w-3 h-3 mr-1" />
             Shipped
           </Badge>
         );
       case "delivered":
         return (
-          <Badge className="bg-emerald-600">
+          <Badge className="bg-[#028090]/20 text-[#028090] dark:text-[#BDCDCF] border border-[#028090]/30">
             <CheckCircle className="w-3 h-3 mr-1" />
             Delivered
           </Badge>
         );
       case "cancelled":
         return (
-          <Badge variant="destructive">
+          <Badge className="bg-[#E63946]/20 text-[#E63946] dark:text-[#FFA69E] border border-[#E63946]/30">
             <XCircle className="w-3 h-3 mr-1" />
             Cancelled
           </Badge>
@@ -197,15 +195,14 @@ export default function OrdersPage() {
     return productIds.reduce((sum, item) => sum + (item.quantity || 1), 0);
   };
 
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
+      <div className="min-h-screen bg-[#F8FAFC] dark:bg-gradient-to-b dark:from-[#001A19] dark:to-[#022E22]">
         <Navbar />
         <div className="container mx-auto px-4 py-12">
           <div className="text-center py-16">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-300">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#034C36] mx-auto"></div>
+            <p className="mt-4 text-[#003332] dark:text-[#BDCDCF]">
               Loading your orders...
             </p>
           </div>
@@ -216,15 +213,15 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-gradient-to-b dark:from-[#001A19] dark:to-[#022E22]">
       <Navbar />
 
       <div className="container mx-auto px-4 py-12">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="text-3xl font-bold text-[#003332] dark:text-[#BDCDCF] mb-2">
             My Orders
           </h1>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-[#003332]/80 dark:text-[#BDCDCF]">
             Track and manage your orders
           </p>
         </div>
@@ -232,29 +229,29 @@ export default function OrdersPage() {
         {/* Search Bar */}
         <div className="mb-6">
           <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#003332] w-4 h-4" />
             <Input
               placeholder="Search by order code..."
               value={searchTerm}
               onChange={(e) => handleSearch(e.target.value)}
-              className="pl-10 bg-white dark:bg-slate-800"
+              className="pl-10 bg-white dark:bg-[#022E22] border border-[#BDCDCF] text-[#003332] dark:text-[#BDCDCF]"
             />
           </div>
         </div>
 
         {filteredOrders.length === 0 ? (
           <div className="text-center py-16">
-            <ShoppingBag className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+            <ShoppingBag className="w-16 h-16 text-[#BDCDCF] mx-auto mb-4" />
+            <h2 className="text-2xl font-semibold text-[#003332] dark:text-[#BDCDCF] mb-2">
               {searchTerm ? "No orders found" : "No orders yet"}
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
+            <p className="text-[#003332]/80 dark:text-[#BDCDCF] mb-6">
               {searchTerm
                 ? "Try adjusting your search criteria."
                 : "Start shopping to see your orders here."}
             </p>
             {!searchTerm && (
-              <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+              <Button className="bg-[#034C36] hover:bg-[#003332] text-white">
                 Start Shopping
               </Button>
             )}
@@ -262,17 +259,20 @@ export default function OrdersPage() {
         ) : (
           <div className="space-y-4">
             {filteredOrders.map((order) => (
-              <Card key={order.id} className="bg-white dark:bg-slate-900">
+              <Card 
+                key={order.id} 
+                className="bg-white dark:bg-[#022E22] border border-[#BDCDCF]/50"
+              >
                 <CardContent className="p-6">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div className="space-y-2">
                       <div className="flex items-center gap-3">
-                        <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm font-mono">
+                        <code className="bg-[#BDCDCF]/20 text-[#003332] dark:text-[#BDCDCF] px-2 py-1 rounded text-sm font-mono">
                           {order.order_code}
                         </code>
                         {getStatusBadge(order.status)}
                       </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-300">
+                      <div className="text-sm text-[#003332]/80 dark:text-[#BDCDCF]">
                         <div>
                           {getTotalProducts(order.product_ids)} items •{" "}
                           {formatPrice(order.total_amount)}
@@ -283,7 +283,7 @@ export default function OrdersPage() {
                     <Button
                       variant="outline"
                       onClick={() => handleViewOrder(order)}
-                      className="w-full md:w-auto"
+                      className="w-full md:w-auto border-[#034C36] text-[#034C36] hover:bg-[#034C36]/10 hover:text-[#034C36] dark:border-[#BDCDCF] dark:text-[#BDCDCF] dark:hover:bg-[#003332]"
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       View Details
@@ -298,23 +298,25 @@ export default function OrdersPage() {
 
       {/* Order Details Dialog */}
       <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white dark:bg-[#022E22] border border-[#BDCDCF]">
           <DialogHeader>
-            <DialogTitle>Order Details</DialogTitle>
+            <DialogTitle className="text-[#003332] dark:text-[#BDCDCF]">
+              Order Details
+            </DialogTitle>
           </DialogHeader>
           {selectedOrder && (
-            <div className="space-y-6">
+            <div className="space-y-6 text-[#003332] dark:text-[#BDCDCF]">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="text-sm font-medium">
                     Order Code
                   </label>
-                  <p className="text-sm font-mono bg-gray-100 dark:bg-gray-700 p-2 rounded">
+                  <p className="text-sm font-mono bg-[#BDCDCF]/20 p-2 rounded">
                     {selectedOrder.order_code}
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="text-sm font-medium">
                     Status
                   </label>
                   <div className="mt-1">
@@ -325,7 +327,7 @@ export default function OrdersPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="text-sm font-medium">
                     Order Date
                   </label>
                   <p className="text-sm">
@@ -333,7 +335,7 @@ export default function OrdersPage() {
                   </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label className="text-sm font-medium">
                     Total Amount
                   </label>
                   <p className="text-sm font-bold">
@@ -343,19 +345,19 @@ export default function OrdersPage() {
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                <label className="text-sm font-medium mb-2 block">
                   Products Ordered
                 </label>
                 <div className="space-y-3">
                   {selectedOrder.product_ids.map((item: Product, index) => (
                     <div
                       key={index}
-                      className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"
+                      className="bg-[#BDCDCF]/10 dark:bg-[#003332] p-3 rounded-lg"
                     >
                       <div className="flex justify-between items-start">
                         <div>
                           <h4 className="font-medium">{item.name}</h4>
-                          <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                          <div className="text-sm text-[#003332]/80 dark:text-[#BDCDCF] mt-1">
                             {item.size && <span>Size: {item.size} • </span>}
                             {item.color && <span>Color: {item.color} • </span>}
                             <span>Qty: {item.quantity}</span>
@@ -365,7 +367,7 @@ export default function OrdersPage() {
                           <div className="font-medium">
                             {formatPrice(item.price)}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-[#003332]/80 dark:text-[#BDCDCF]">
                             Total: {formatPrice(item.price * item.quantity)}
                           </div>
                         </div>
@@ -376,7 +378,7 @@ export default function OrdersPage() {
               </div>
               <div className="flex justify-end">
                 <Button
-                  variant="destructive"
+                  className="bg-[#E63946]/90 hover:bg-[#E63946] text-white"
                   onClick={() => {
                     setOrderToDelete(selectedOrder);
                     setShowDeleteDialog(true);
@@ -392,16 +394,27 @@ export default function OrdersPage() {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent>
+        <DialogContent className="bg-white dark:bg-[#022E22] border border-[#BDCDCF]">
           <DialogHeader>
-            <DialogTitle>Delete Order</DialogTitle>
+            <DialogTitle className="text-[#003332] dark:text-[#BDCDCF]">
+              Delete Order
+            </DialogTitle>
           </DialogHeader>
-          <p>Are you sure you want to delete this order?</p>
+          <p className="text-[#003332] dark:text-[#BDCDCF]">
+            Are you sure you want to delete this order?
+          </p>
           <div className="flex justify-end gap-2 mt-4">
-            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+            <Button 
+              variant="outline" 
+              onClick={() => setShowDeleteDialog(false)}
+              className="border-[#034C36] text-[#034C36] hover:bg-[#034C36]/10 dark:border-[#BDCDCF] dark:text-[#BDCDCF] dark:hover:bg-[#003332]"
+            >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDeleteOrder}>
+            <Button 
+              className="bg-[#E63946]/90 hover:bg-[#E63946] text-white"
+              onClick={handleDeleteOrder}
+            >
               Delete
             </Button>
           </div>

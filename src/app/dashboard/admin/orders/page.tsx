@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient } from "../../../../../supabase/server";
+import { createClient } from "../../../../supabase/server";
 import DashboardNavbar from "@/components/dashboard-navbar";
 import OrderManagement from "./components/OrderManagement";
 import { InfoIcon } from "lucide-react";

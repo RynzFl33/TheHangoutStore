@@ -1,5 +1,5 @@
-import { createClient } from "../../../../../supabase/server";
-import { createBuildClient } from "../../../../../supabase/client-build";
+import { createClient } from "../../../../supabase/server";
+import { createBuildClient } from "../../../../supabase/client-build";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
@@ -120,10 +120,10 @@ function ProductGrid({ products }: { products: Product[] }) {
   if (products.length === 0) {
     return (
       <div className="text-center py-12">
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+        <h3 className="text-xl font-semibold text-[#003332] dark:text-[#BDCDCF] mb-2">
           No products found
         </h3>
-        <p className="text-gray-600 dark:text-gray-300">
+        <p className="text-[#003332]/80 dark:text-[#BDCDCF]">
           Check back soon for new arrivals in this subcategory.
         </p>
       </div>
@@ -139,7 +139,6 @@ function ProductGrid({ products }: { products: Product[] }) {
   );
 }
 
-// This is the key fix - using a generic Record type
 export async function generateMetadata({
   params,
 }: {
@@ -161,7 +160,6 @@ export async function generateMetadata({
   };
 }
 
-// This is the critical fix - using a generic Record type
 export default async function SubcategoryPage({
   params,
 }: {
@@ -183,10 +181,11 @@ export default async function SubcategoryPage({
   const saleProducts = products.filter((p) => p.is_on_sale);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-gradient-to-b dark:from-[#001A19] dark:to-[#022E22]">
       <Navbar />
 
-      <section className="relative bg-gradient-to-r from-purple-600 to-pink-600 text-white py-16 overflow-hidden">
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-r from-[#003332] to-[#034C36] text-[#BDCDCF] py-16 overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src={subcategory.image_url}
@@ -197,7 +196,7 @@ export default async function SubcategoryPage({
           />
         </div>
         <div className="relative container mx-auto px-4">
-          <div className="flex items-center gap-2 text-purple-100 hover:text-white mb-4 transition-colors">
+          <div className="flex items-center gap-2 text-[#BDCDCF] hover:text-white mb-4 transition-colors">
             <Link href="/categories" className="hover:underline">
               Categories
             </Link>
@@ -209,16 +208,16 @@ export default async function SubcategoryPage({
               {subcategory.categories.name}
             </Link>
             <span>/</span>
-            <span>{subcategory.name}</span>
+            <span className="text-white font-medium">{subcategory.name}</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white">
             {subcategory.name}
           </h1>
-          <p className="text-xl text-purple-100 max-w-2xl">
+          <p className="text-xl text-[#BDCDCF] max-w-2xl">
             {subcategory.description}
           </p>
           <div className="mt-6">
-            <Badge className="bg-white/20 text-white border-white/30">
+            <Badge className="bg-[#BDCDCF]/20 text-[#BDCDCF] border-[#BDCDCF]/30">
               {products.length} {products.length === 1 ? "Product" : "Products"}
             </Badge>
           </div>
@@ -229,34 +228,34 @@ export default async function SubcategoryPage({
         <div className="mb-8">
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#003332] w-4 h-4" />
               <Input
                 placeholder={`Search ${subcategory.name.toLowerCase()}...`}
-                className="pl-10 bg-white dark:bg-slate-800"
+                className="pl-10 bg-white dark:bg-[#022E22] border-[#BDCDCF] text-[#003332] dark:text-[#BDCDCF]"
               />
             </div>
             <div className="flex gap-2">
               <Select>
-                <SelectTrigger className="w-48 bg-white dark:bg-slate-800">
+                <SelectTrigger className="w-48 bg-white dark:bg-[#022E22] border-[#BDCDCF] text-[#003332] dark:text-[#BDCDCF]">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="newest">Newest First</SelectItem>
-                  <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  <SelectItem value="popular">Most Popular</SelectItem>
+                <SelectContent className="bg-white dark:bg-[#022E22] border-[#BDCDCF] text-[#003332] dark:text-[#BDCDCF]">
+                  <SelectItem value="newest" className="hover:bg-[#BDCDCF]/20">Newest First</SelectItem>
+                  <SelectItem value="price-low" className="hover:bg-[#BDCDCF]/20">Price: Low to High</SelectItem>
+                  <SelectItem value="price-high" className="hover:bg-[#BDCDCF]/20">Price: High to Low</SelectItem>
+                  <SelectItem value="popular" className="hover:bg-[#BDCDCF]/20">Most Popular</SelectItem>
                 </SelectContent>
               </Select>
               <Select>
-                <SelectTrigger className="w-32 bg-white dark:bg-slate-800">
+                <SelectTrigger className="w-32 bg-white dark:bg-[#022E22] border-[#BDCDCF] text-[#003332] dark:text-[#BDCDCF]">
                   <SelectValue placeholder="Price" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Prices</SelectItem>
-                  <SelectItem value="under-25">Under $25</SelectItem>
-                  <SelectItem value="25-50">$25 - $50</SelectItem>
-                  <SelectItem value="50-100">$50 - $100</SelectItem>
-                  <SelectItem value="over-100">Over $100</SelectItem>
+                <SelectContent className="bg-white dark:bg-[#022E22] border-[#BDCDCF] text-[#003332] dark:text-[#BDCDCF]">
+                  <SelectItem value="all" className="hover:bg-[#BDCDCF]/20">All Prices</SelectItem>
+                  <SelectItem value="under-25" className="hover:bg-[#BDCDCF]/20">Under $25</SelectItem>
+                  <SelectItem value="25-50" className="hover:bg-[#BDCDCF]/20">$25 - $50</SelectItem>
+                  <SelectItem value="50-100" className="hover:bg-[#BDCDCF]/20">$50 - $100</SelectItem>
+                  <SelectItem value="over-100" className="hover:bg-[#BDCDCF]/20">Over $100</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -265,10 +264,10 @@ export default async function SubcategoryPage({
 
         {featuredProducts.length > 0 && (
           <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+            <h2 className="text-3xl font-bold mb-6 text-[#003332] dark:text-[#BDCDCF]">
               Featured {subcategory.name}
             </h2>
-            <Suspense fallback={<div>Loading featured products...</div>}>
+            <Suspense fallback={<div className="text-[#003332] dark:text-[#BDCDCF]">Loading featured products...</div>}>
               <ProductGrid products={featuredProducts} />
             </Suspense>
           </section>
@@ -276,20 +275,20 @@ export default async function SubcategoryPage({
 
         {saleProducts.length > 0 && (
           <section className="mb-12">
-            <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+            <h2 className="text-3xl font-bold mb-6 text-[#003332] dark:text-[#BDCDCF]">
               {subcategory.name} on Sale
             </h2>
-            <Suspense fallback={<div>Loading sale products...</div>}>
+            <Suspense fallback={<div className="text-[#003332] dark:text-[#BDCDCF]">Loading sale products...</div>}>
               <ProductGrid products={saleProducts} />
             </Suspense>
           </section>
         )}
 
         <section>
-          <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+          <h2 className="text-3xl font-bold mb-6 text-[#003332] dark:text-[#BDCDCF]">
             All {subcategory.name}
           </h2>
-          <Suspense fallback={<div>Loading products...</div>}>
+          <Suspense fallback={<div className="text-[#003332] dark:text-[#BDCDCF]">Loading products...</div>}>
             <ProductGrid products={products} />
           </Suspense>
         </section>

@@ -24,7 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Edit, Trash2, Eye } from "lucide-react";
-import { createClient } from "../../../../../supabase/client";
+import { createClient } from "../../../../supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
 interface Product {

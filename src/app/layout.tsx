@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description:
     "Discover the latest trends in streetwear, designed for the next generation.",
     icons: {
-      icon: "/TheHangOut.png",
+      icon: "/TheHangOut.ico",
     }
 };
 

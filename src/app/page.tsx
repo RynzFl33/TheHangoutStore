@@ -1,35 +1,28 @@
 import Footer from "@/components/footer";
 import Hero from "@/components/hero";
 import Navbar from "@/components/navbar";
-import {
-  ArrowUpRight,
-  Shield,
-  Truck,
-  Star,
-  Heart,
-} from "lucide-react";
-import { createClient } from "../../supabase/server";
+import { ArrowUpRight, Shield, Truck, Star, Heart } from "lucide-react";
+import { createClient } from "../supabase/server";
 import Link from "next/link";
 import Image from "next/image";
-
 
 export default async function Home() {
   const supabase = await createClient();
   await supabase.auth.getUser();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-b from-[#f0f7f5] to-[#e1ece9] dark:from-[#001a19] dark:to-[#002b29]">
       <Navbar />
       <Hero />
 
       {/* Featured Categories */}
-      <section className="py-20 bg-white dark:bg-slate-900">
+      <section className="py-20 bg-[#f9fbfb] dark:bg-[#001a19]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+            <h2 className="text-4xl font-bold mb-4 text-[#003332] dark:text-[#BDCDCF]">
               Shop by Category
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-[#034C36] dark:text-[#9ab3b5] max-w-2xl mx-auto">
               Discover the latest trends in streetwear, designed for the next
               generation.
             </p>
@@ -71,12 +64,12 @@ export default async function Home() {
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                   />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
+                  <div className="absolute inset-0 bg-[#034C36]/20 group-hover:bg-[#034C36]/30 transition-colors" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
+                <h3 className="text-xl font-semibold mb-2 text-[#003332] dark:text-[#BDCDCF]">
                   {category.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-[#034C36] dark:text-[#9ab3b5]">
                   {category.description}
                 </p>
               </div>
@@ -86,13 +79,13 @@ export default async function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-slate-50 dark:bg-slate-800">
+      <section className="py-20 bg-[#e5edeb] dark:bg-[#001a19]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+            <h2 className="text-4xl font-bold mb-4 text-[#003332] dark:text-[#BDCDCF]">
               Why Shop with Us
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-[#034C36] dark:text-[#9ab3b5] max-w-2xl mx-auto">
               Experience the future of fashion with our premium service and
               quality.
             </p>
@@ -123,15 +116,15 @@ export default async function Home() {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="text-center p-8 bg-white dark:bg-slate-900 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+                className="text-center p-8 bg-white dark:bg-[#002b29] rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-[#BDCDCF]/30"
               >
-                <div className="text-purple-600 dark:text-purple-400 mb-6 flex justify-center">
+                <div className="text-[#034C36] dark:text-[#BDCDCF] mb-6 flex justify-center">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+                <h3 className="text-xl font-semibold mb-3 text-[#003332] dark:text-[#BDCDCF]">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-[#034C36] dark:text-[#9ab3b5]">
                   {feature.description}
                 </p>
               </div>
@@ -141,17 +134,17 @@ export default async function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-slate-900 to-purple-900 text-white">
+      <section className="py-20 bg-gradient-to-r from-[#003332] to-[#034C36] text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-4">
             Ready to Upgrade Your Style?
           </h2>
-          <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-[#BDCDCF] mb-8 max-w-2xl mx-auto">
             Join the fashion revolution and discover your perfect look today.
           </p>
           <Link
             href="/shop"
-            className="inline-flex items-center px-8 py-4 text-white bg-purple-600 rounded-lg hover:bg-purple-700 transition-colors text-lg font-medium"
+            className="inline-flex items-center px-8 py-4 text-[#003332] bg-[#BDCDCF] rounded-lg hover:bg-[#e6f0ee] transition-colors text-lg font-medium"
           >
             Shop Now
             <ArrowUpRight className="ml-2 w-5 h-5" />

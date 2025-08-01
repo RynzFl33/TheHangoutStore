@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/form";
 import { Badge } from "@/components/ui/badge";
 import { X, Plus } from "lucide-react";
-import { createClient } from "../../../../../supabase/client";
+import { createClient } from "../../../../supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
 interface Product {

@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { createClient } from "../../../supabase/server";
+import { createClient } from "../../supabase/server";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import ProductCard from "@/components/product-card";
@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Search} from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
 
 interface Product {
@@ -83,10 +83,10 @@ function ProductGrid({ products }: { products: Product[] }) {
   if (products.length === 0) {
     return (
       <div className="text-center py-12">
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+        <h3 className="text-xl font-semibold text-[#003332] dark:text-[#BDCDCF] mb-2">
           No products found
         </h3>
-        <p className="text-gray-600 dark:text-gray-300">
+        <p className="text-[#034C36] dark:text-[#9ab3b5]">
           Try adjusting your search or filter criteria.
         </p>
       </div>
@@ -105,13 +105,13 @@ function ProductGrid({ products }: { products: Product[] }) {
 function CategoryFilter({ categories }: { categories: Category[] }) {
   return (
     <div className="mb-8">
-      <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+      <h3 className="text-lg font-semibold mb-4 text-[#003332] dark:text-[#BDCDCF]">
         Shop by Category
       </h3>
       <div className="flex flex-wrap gap-3">
         <Badge
           variant="outline"
-          className="cursor-pointer hover:bg-[#F5DEB3] hover:border-[#36454F] transition-colors"
+          className="cursor-pointer hover:bg-[#034C36]/10 hover:text-[#034C36] hover:border-[#034C36] transition-colors border-[#BDCDCF] text-[#003332] dark:text-[#BDCDCF] dark:border-[#034C36] dark:hover:bg-[#034C36]/20"
         >
           All Products
         </Badge>
@@ -119,7 +119,7 @@ function CategoryFilter({ categories }: { categories: Category[] }) {
           <Link key={category.id} href={`/categories/${category.slug}`}>
             <Badge
               variant="outline"
-              className="cursor-pointer hover:bg-[#F5DEB3] hover:border-[#36454F] transition-colors"
+              className="cursor-pointer hover:bg-[#034C36]/10 hover:text-[#034C36] hover:border-[#034C36] transition-colors border-[#BDCDCF] text-[#003332] dark:text-[#BDCDCF] dark:border-[#034C36] dark:hover:bg-[#034C36]/20"
             >
               {category.name}
             </Badge>
@@ -153,26 +153,26 @@ export default async function ShopPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-b from-[#f0f7f5] to-[#e1ece9] dark:from-[#001a19] dark:to-[#002b29]">
       <Navbar />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-[#F5DEB3] via-[#36454F] to-[#36454F]/600 text-white py-20">
+      <section className="bg-gradient-to-r from-[#034C36] via-[#003332] to-[#003332] text-white py-20">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-white-200">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">
             Discover Your Style
           </h1>
-          <p className="text-xl text-white max-w-2xl mx-auto mb-8">
+          <p className="text-xl text-[#BDCDCF] max-w-2xl mx-auto mb-8">
             Curated collections of the hottest streetwear and fashion trends
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <Badge className="bg-white/20 text-white border-white/30">
+            <Badge className="bg-[#003332] text-[#BDCDCF] border-[#034C36]">
               New Arrivals Daily
             </Badge>
-            <Badge className="bg-white/20 text-white border-white/30">
+            <Badge className="bg-[#003332] text-[#BDCDCF] border-[#034C36]">
               Exclusive Deals
             </Badge>
-            <Badge className="bg-white/20 text-white border-white/30">
+            <Badge className="bg-[#003332] text-[#BDCDCF] border-[#034C36]">
               Free Shipping Over $75
             </Badge>
           </div>
@@ -184,35 +184,35 @@ export default async function ShopPage() {
         <div className="mb-12">
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#034C36] w-4 h-4" />
               <Input
                 placeholder="Search products..."
-                className="pl-10 bg-white dark:bg-slate-800 border-2 focus:border-[#F5DEB3]/300"
+                className="pl-10 bg-white dark:bg-[#002b29] border-2 border-[#BDCDCF] focus:border-[#034C36]"
               />
             </div>
             <div className="flex gap-2">
               <Select>
-                <SelectTrigger className="w-48 bg-white dark:bg-slate-800">
+                <SelectTrigger className="w-48 bg-white dark:bg-[#002b29] border-[#BDCDCF] text-[#003332] dark:text-[#BDCDCF]">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="newest">Newest First</SelectItem>
-                  <SelectItem value="price-low">Price: Low to High</SelectItem>
-                  <SelectItem value="price-high">Price: High to Low</SelectItem>
-                  <SelectItem value="popular">Most Popular</SelectItem>
-                  <SelectItem value="rating">Highest Rated</SelectItem>
+                <SelectContent className="bg-white dark:bg-[#002b29] border-[#BDCDCF]">
+                  <SelectItem value="newest" className="hover:bg-[#034C36]/10 focus:bg-[#034C36]/20">Newest First</SelectItem>
+                  <SelectItem value="price-low" className="hover:bg-[#034C36]/10 focus:bg-[#034C36]/20">Price: Low to High</SelectItem>
+                  <SelectItem value="price-high" className="hover:bg-[#034C36]/10 focus:bg-[#034C36]/20">Price: High to Low</SelectItem>
+                  <SelectItem value="popular" className="hover:bg-[#034C36]/10 focus:bg-[#034C36]/20">Most Popular</SelectItem>
+                  <SelectItem value="rating" className="hover:bg-[#034C36]/10 focus:bg-[#034C36]/20">Highest Rated</SelectItem>
                 </SelectContent>
               </Select>
               <Select>
-                <SelectTrigger className="w-32 bg-white dark:bg-slate-800">
+                <SelectTrigger className="w-32 bg-white dark:bg-[#002b29] border-[#BDCDCF] text-[#003332] dark:text-[#BDCDCF]">
                   <SelectValue placeholder="Price" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Prices</SelectItem>
-                  <SelectItem value="under-25">Under $25</SelectItem>
-                  <SelectItem value="25-50">$25 - $50</SelectItem>
-                  <SelectItem value="50-100">$50 - $100</SelectItem>
-                  <SelectItem value="over-100">Over $100</SelectItem>
+                <SelectContent className="bg-white dark:bg-[#002b29] border-[#BDCDCF]">
+                  <SelectItem value="all" className="hover:bg-[#034C36]/10 focus:bg-[#034C36]/20">All Prices</SelectItem>
+                  <SelectItem value="under-25" className="hover:bg-[#034C36]/10 focus:bg-[#034C36]/20">Under $25</SelectItem>
+                  <SelectItem value="25-50" className="hover:bg-[#034C36]/10 focus:bg-[#034C36]/20">$25 - $50</SelectItem>
+                  <SelectItem value="50-100" className="hover:bg-[#034C36]/10 focus:bg-[#034C36]/20">$50 - $100</SelectItem>
+                  <SelectItem value="over-100" className="hover:bg-[#034C36]/10 focus:bg-[#034C36]/20">Over $100</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -225,10 +225,10 @@ export default async function ShopPage() {
         {newArrivals.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-3xl font-bold text-[#003332] dark:text-[#BDCDCF]">
                 New Arrivals
               </h2>
-              <Badge className="bg-gradient-to-r from-orange-500 to- text-white">
+              <Badge className="bg-[#034C36] text-[#BDCDCF]">
                 Just Dropped
               </Badge>
             </div>
@@ -242,10 +242,10 @@ export default async function ShopPage() {
         {featuredProducts.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-3xl font-bold text-[#003332] dark:text-[#BDCDCF]">
                 Featured Collection
               </h2>
-              <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+              <Badge className="bg-gradient-to-r from-[#034C36] to-[#003332] text-[#BDCDCF]">
                 Editor&apos;s Choice
               </Badge>
             </div>
@@ -259,10 +259,10 @@ export default async function ShopPage() {
         {saleProducts.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-3xl font-bold text-[#003332] dark:text-[#BDCDCF]">
                 Hot Deals
               </h2>
-              <Badge className="bg-gradient-to-r from-[#FFD700]/50 to-[#FFD700]/60 text-white animate-pulse">
+              <Badge className="bg-[#003332] text-[#BDCDCF] animate-pulse">
                 Limited Time
               </Badge>
             </div>
@@ -276,10 +276,10 @@ export default async function ShopPage() {
         {premiumProducts.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-3xl font-bold text-[#003332] dark:text-[#BDCDCF]">
                 Premium Collection
               </h2>
-              <Badge className="bg-gradient-to-r from-[#FFD700]/50 to-[#FFD700]/60 text-white">
+              <Badge className="bg-gradient-to-r from-[#034C36] to-[#003332] text-[#BDCDCF]">
                 Luxury
               </Badge>
             </div>
@@ -297,10 +297,10 @@ export default async function ShopPage() {
         {budgetFriendly.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-3xl font-bold text-[#003332] dark:text-[#BDCDCF]">
                 Budget Friendly
               </h2>
-              <Badge className="bg-gradient-to-r from-[#FFD700]/50 to-[#FFD700]/60 text-white">
+              <Badge className="bg-[#034C36] text-[#BDCDCF]">
                 Under $50
               </Badge>
             </div>
@@ -318,10 +318,10 @@ export default async function ShopPage() {
         {highRatedProducts.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-3xl font-bold text-[#003332] dark:text-[#BDCDCF]">
                 In Stock & Ready
               </h2>
-              <Badge className="bg-gradient-to-r from-[#50C878]/50 to-[#50C878]/60 text-white">
+              <Badge className="bg-gradient-to-r from-[#034C36] to-[#003332] text-[#BDCDCF]">
                 Fast Shipping
               </Badge>
             </div>
@@ -335,10 +335,10 @@ export default async function ShopPage() {
         {remainingProducts.length > 0 && (
           <section className="mb-16">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              <h2 className="text-3xl font-bold text-[#003332] dark:text-[#BDCDCF]">
                 More to Explore
               </h2>
-              <Badge variant="outline" className="border-gray-300">
+              <Badge variant="outline" className="border-[#BDCDCF] text-[#003332] dark:text-[#BDCDCF]">
                 {remainingProducts.length} items
               </Badge>
             </div>

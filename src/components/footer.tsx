@@ -1,40 +1,40 @@
 import Link from "next/link";
-import { Instagram, Twitter, Facebook} from "lucide-react";
+import { Instagram, Twitter, Facebook } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-slate-900 text-white">
+    <footer className="bg-[#003332] text-[#BDCDCF]">
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand Column */}
           <div className="md:col-span-1">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-[#BDCDCF] to-[#9ab3b5] bg-clip-text text-transparent mb-4">
               TheHangout
             </h3>
-            <p className="text-gray-400 mb-6 leading-relaxed">
+            <p className="mb-6 leading-relaxed">
               Your destination for the latest streetwear and fashion trends.
               Express yourself with our curated collection.
             </p>
             <div className="flex space-x-4">
               <a
                 href="#"
-                className="text-gray-400 hover:text-purple-400 transition-colors"
+                className="hover:text-white transition-colors"
               >
                 <span className="sr-only">Instagram</span>
                 <Instagram className="h-6 w-6" />
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-purple-400 transition-colors"
+                className="hover:text-white transition-colors"
               >
                 <span className="sr-only">Twitter</span>
                 <Twitter className="h-6 w-6" />
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-purple-400 transition-colors"
+                className="hover:text-white transition-colors"
               >
                 <span className="sr-only">Facebook</span>
                 <Facebook className="h-6 w-6" />
@@ -49,7 +49,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/shop"
-                  className="text-gray-400 hover:text-purple-400 transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   All Products
                 </Link>
@@ -57,7 +57,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/categories/hoodies"
-                  className="text-gray-400 hover:text-purple-400 transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   Hoodies & Sweatshirts
                 </Link>
@@ -65,7 +65,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/categories/tees"
-                  className="text-gray-400 hover:text-purple-400 transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   Graphic Tees
                 </Link>
@@ -73,7 +73,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/categories/streetwear"
-                  className="text-gray-400 hover:text-purple-400 transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   Streetwear
                 </Link>
@@ -81,7 +81,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/categories/accessories"
-                  className="text-gray-400 hover:text-purple-400 transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   Accessories
                 </Link>
@@ -96,7 +96,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/contact"
-                  className="text-gray-400 hover:text-purple-400 transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   Contact Us
                 </Link>
@@ -104,7 +104,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/faq"
-                  className="text-gray-400 hover:text-purple-400 transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   FAQ
                 </Link>
@@ -112,7 +112,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/size-guide"
-                  className="text-gray-400 hover:text-purple-400 transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   Size Guide
                 </Link>
@@ -120,7 +120,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/shipping"
-                  className="text-gray-400 hover:text-purple-400 transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   Shipping Info
                 </Link>
@@ -128,7 +128,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/returns"
-                  className="text-gray-400 hover:text-purple-400 transition-colors"
+                  className="hover:text-white transition-colors"
                 >
                   Returns
                 </Link>
@@ -139,7 +139,7 @@ export default function Footer() {
           {/* Newsletter Column */}
           <div>
             <h3 className="font-semibold text-white mb-4">Stay Updated</h3>
-            <p className="text-gray-400 mb-4 text-sm">
+            <p className="mb-4 text-sm">
               Subscribe to get special offers, free giveaways, and exclusive
               deals.
             </p>
@@ -147,36 +147,36 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="px-4 py-2 bg-[#002b29] border border-[#034C36] rounded-lg text-white placeholder-[#9ab3b5] focus:outline-none focus:ring-2 focus:ring-[#BDCDCF] focus:border-transparent"
               />
-              <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium">
+              <button className="px-4 py-2 bg-[#034C36] text-[#BDCDCF] rounded-lg hover:bg-[#013429] hover:text-white transition-colors text-sm font-medium">
                 Subscribe
               </button>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-slate-800">
-          <div className="text-gray-400 mb-4 md:mb-0 text-sm">
+        <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-[#034C36]">
+          <div className="mb-4 md:mb-0 text-sm">
             © {currentYear} TheHangout Store. All rights reserved.
           </div>
 
           <div className="flex space-x-6 text-sm">
             <Link
               href="/privacy"
-              className="text-gray-400 hover:text-purple-400 transition-colors"
+              className="hover:text-white transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="text-gray-400 hover:text-purple-400 transition-colors"
+              className="hover:text-white transition-colors"
             >
               Terms of Service
             </Link>
             <Link
               href="/cookies"
-              className="text-gray-400 hover:text-purple-400 transition-colors"
+              className="hover:text-white transition-colors"
             >
               Cookie Policy
             </Link>

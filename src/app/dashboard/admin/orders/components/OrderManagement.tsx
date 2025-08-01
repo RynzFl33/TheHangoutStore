@@ -34,7 +34,7 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
-import { createClient } from "../../../../../../supabase/client";
+import { createClient } from "../../../../../supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
 interface OrderedProduct {

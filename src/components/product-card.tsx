@@ -9,6 +9,7 @@ import { Card, CardContent, CardFooter } from "./ui/card";
 import { addToCartAction, addToFavoritesAction } from "@/app/actions";
 import { useToast } from "./ui/use-toast";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Product {
   id: string;
@@ -63,8 +64,7 @@ export default function ProductCard({
         description: "Failed to add item to cart. Please try again.",
         variant: "destructive",
       });
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -98,42 +98,48 @@ export default function ProductCard({
       initial={{ opacity: 0, scale: 0.98, y: 12 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      whileHover={{ scale: 1.03, y: -5, boxShadow: "0 12px 20px rgba(0,0,0,0.12)" }}
+      whileHover={{
+        scale: 1.03,
+        y: -5,
+        boxShadow: "0 12px 20px rgba(0,0,0,0.08)"
+      }}
       className="group cursor-pointer select-none"
     >
-      <Card className="relative rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <Card className="relative rounded-xl bg-[#F8FAF9] dark:bg-[#0A1A15] border border-[#BDCDCF] shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
         {/* Image */}
-        <div className="relative overflow-hidden rounded-t-xl">
+        <div className="relative overflow-hidden">
           <Link href={`/product/${product.id}`}>
-            <motion.img
-              src={
-                product.image_url ||
-                "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=80"
-              }
-              alt={product.name}
-              className="w-full h-64 object-cover"
+            <motion.div
+              className="w-full h-64 relative"
               initial={{ scale: 1 }}
-              whileHover={{ scale: 1.05, boxShadow: "0 8px 16px rgba(0,0,0,0.1)" }}
+              whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.4 }}
-              loading="lazy"
-              draggable={false}
-            />
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-[#003332] to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-300 z-10" />
+              <Image
+                src={
+                  product.image_url ||
+                  "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&q=80"
+                }
+                alt={product.name}
+                width={400}
+                height={400}
+                className="w-full h-full object-cover"
+                loading="lazy"
+                draggable={false}
+              />
+            </motion.div>
           </Link>
 
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
             {product.is_on_sale && (
-              <Badge
-                variant="destructive"
-                className="text-xs font-semibold bg-red-100 text-red-700 border-none shadow-sm"
-              >
+              <Badge className="text-xs font-semibold bg-[#034C36] text-white border-none shadow-sm px-3 py-1">
                 SALE
               </Badge>
             )}
             {product.is_featured && (
-              <Badge
-                className="text-xs font-semibold bg-yellow-100 text-yellow-800 border-none shadow-sm"
-              >
+              <Badge className="text-xs font-semibold bg-[#F9A825] text-[#003332] border-none shadow-sm px-3 py-1">
                 FEATURED
               </Badge>
             )}
@@ -146,10 +152,10 @@ export default function ProductCard({
               whileTap={{ scale: 0.9 }}
               onClick={handleAddToFavorites}
               aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
-              className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-gray-900 rounded-full shadow text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="absolute top-3 right-3 p-2 bg-white/90 dark:bg-[#0A1A15]/90 rounded-full shadow text-gray-600 dark:text-[#BDCDCF] hover:bg-[#034C36]/20 transition-colors z-10"
             >
               <Heart
-                className={`w-5 h-5 transition-colors ${isFavorited ? "fill-red-500 text-red-500" : ""
+                className={`w-5 h-5 transition-colors ${isFavorited ? "fill-[#E63946] text-[#E63946]" : ""
                   }`}
               />
             </motion.button>
@@ -157,10 +163,10 @@ export default function ProductCard({
         </div>
 
         {/* Content */}
-        <CardContent className="px-6 py-5 text-gray-900 dark:text-gray-100">
+        <CardContent className="px-5 py-4 text-[#003332] dark:text-[#BDCDCF]">
           <Link href={`/product/${product.id}`}>
             <motion.h3
-              className="font-semibold text-lg mb-1 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+              className="font-bold text-lg mb-1 hover:text-[#034C36] dark:hover:text-[#76B39D] transition-colors line-clamp-2 min-h-[3rem]"
               whileHover={{ scale: 1.02 }}
               tabIndex={0}
             >
@@ -169,17 +175,17 @@ export default function ProductCard({
           </Link>
 
           {product.description && (
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
+            <p className="text-sm text-[#5A6D6A] dark:text-[#9BB3B5] mb-4 line-clamp-3">
               {product.description}
             </p>
           )}
 
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
+            <span className="text-xl font-bold text-[#003332] dark:text-white">
               ${displayPrice.toFixed(2)}
             </span>
             {originalPrice && (
-              <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
+              <span className="text-sm text-[#9BB3B5] dark:text-[#7D9D96] line-through">
                 ${originalPrice.toFixed(2)}
               </span>
             )}
@@ -192,7 +198,7 @@ export default function ProductCard({
                 <motion.span
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="inline-block px-2 py-0.5 rounded-full bg-green-100 text-green-800 font-medium tracking-wide text-xs"
+                  className="inline-block px-2 py-1 rounded-full bg-[#E8F5F0] text-[#034C36] font-medium tracking-wide text-xs"
                 >
                   In Stock ({product.stock_quantity} available)
                 </motion.span>
@@ -200,7 +206,7 @@ export default function ProductCard({
                 <motion.span
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="inline-block px-3 py-1 rounded-full bg-red-100 text-red-800 font-medium tracking-wide"
+                  className="inline-block px-3 py-1 rounded-full bg-[#FEE2E2] text-[#B91C1C] font-medium tracking-wide text-xs"
                 >
                   Out of Stock
                 </motion.span>
@@ -211,15 +217,19 @@ export default function ProductCard({
 
         {/* Add to Cart */}
         {showAddToCart && (
-          <CardFooter className="px-6 pb-6 pt-0">
-            <motion.div className="w-full" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+          <CardFooter className="px-5 pb-5 pt-0">
+            <motion.div
+              className="w-full"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
               <Button
                 onClick={handleAddToCart}
                 disabled={
                   isLoading ||
                   (product.stock_quantity !== undefined && product.stock_quantity <= 0)
                 }
-                className="w-full bg-[#F5DEB3] hover:bg-[#36454F] focus:ring-indigo-500 text-white font-semibold py-3 rounded-lg shadow-md transition-all duration-300 flex items-center justify-center gap-3 select-none"
+                className="w-full bg-gradient-to-r from-[#003332] to-[#034C36] hover:from-[#012726] hover:to-[#023B2A] text-white font-semibold py-3 rounded-lg shadow transition-all duration-300 flex items-center justify-center gap-3 select-none"
                 aria-label="Add product to cart"
               >
                 {isLoading ? (
