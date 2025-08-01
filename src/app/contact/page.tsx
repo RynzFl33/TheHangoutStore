@@ -5,8 +5,17 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Mail, Phone, MapPin, Clock, MessageCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, MessageCircle, Heart } from "lucide-react";
 import ContactForm from "@/components/contact-form";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import Image from "next/image";
 
 export default function ContactPage() {
   return (
@@ -30,8 +39,47 @@ export default function ContactPage() {
             className="text-xl text-purple-100 max-w-2xl mx-auto"
           >
             We&apos;d love to hear from you. Send us a message and we&apos;ll respond as soon as possible.
-
           </motion.p>
+          
+          {/* Support Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mt-6"
+          >
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="bg-white/10 hover:bg-white/20 border-white/20">
+                  <Heart className="w-4 h-4 mr-2" />
+                  Support Our Work
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Support Us</DialogTitle>
+                </DialogHeader>
+                <div className="flex flex-col items-center py-4">
+                  <p className="text-center mb-4">
+                    Scan the QR code to support our work. Every contribution helps us grow and improve!
+                  </p>
+                  <div className="bg-white p-4 rounded-lg mb-4">
+                    {/* Replace with your actual QR code image */}
+                    <Image
+                      src="/aba.npg" // Replace with your QR code image path
+                      alt="Support QR Code"
+                      width={200}
+                      height={200}
+                      className="w-48 h-48"
+                    />
+                  </div>
+                  <p className="text-sm text-muted-foreground text-center">
+                    Thank you for your generosity!
+                  </p>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </motion.div>
         </div>
       </section>
 

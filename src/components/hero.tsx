@@ -125,7 +125,7 @@ export default function Hero() {
                   <span className="text-[#BDCDCF] text-sm">$49.99</span>
                 </div>
                 <Link
-                  href="/product/linen-shirt"
+                  href="/shop"
                   className="mt-auto bg-[#BDCDCF] text-[#003332] text-sm px-4 py-2 rounded-md hover:bg-white transition font-medium w-fit"
                 >
                   View Product
